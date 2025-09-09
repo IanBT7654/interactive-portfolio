@@ -1,5 +1,18 @@
 // assets/scripts.js
 
+import { supabaseClient } from './config.js';
+
+// Now you can use supabaseClient directly
+async function testConnection() {
+  const { data, error } = await supabaseClient.from('blog_posts').select('*');
+  if (error) {
+    console.error('❌ Supabase Error:', error);
+  } else {
+    console.log('✅ Supabase Connected. Posts:', data);
+  }
+}
+testConnection();
+
 document.addEventListener("DOMContentLoaded", () => {
   const imagePlaceholder = document.getElementById("imagePlaceholder");
   const blogPostPreview = document.getElementById("blogPostPreview");
