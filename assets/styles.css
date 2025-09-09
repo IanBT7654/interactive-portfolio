@@ -57,6 +57,16 @@ h1 {
   object-fit: cover;
 }
 
+/* Prevent file input's filename text from overflowing */
+#imageUpload {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* === Uniform heights (optional fine-tune) === */
 .image-box,
 .preview-box {
