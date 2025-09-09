@@ -29,6 +29,11 @@ h1 {
   max-height: 100%;
 }
 
+#croppedPreview {
+  display: block;
+  margin: 0 auto;
+}
+
 .hidden {
   display: none !important;
 }
