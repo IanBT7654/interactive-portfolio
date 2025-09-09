@@ -85,10 +85,8 @@ submitBlogBtn.addEventListener('click', async () => {
   if (containsNaughtyWords(caption)) return alert('⚠️ Caption contains restricted words.');
 
   const blob = await new Promise((resolve) => {
-    croppedCanvas.getContext('2d').clearRect(0, 0, croppedCanvas.width, croppedCanvas.height);
+    
     const croppedCanvasTemp = cropper.getCroppedCanvas({ width: 1280, height: 853 });
-    croppedCanvas.getContext('2d').drawImage(croppedCanvasTemp, 0, 0);
-
     croppedCanvasTemp.toBlob(resolve, 'image/jpeg');
   });
 
