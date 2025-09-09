@@ -118,11 +118,25 @@ submitBlogBtn.addEventListener('click', async () => {
 
   // Display result
   blogPreview.innerHTML = `
-    <div class="text-center">
-      <img src="${imageUrl}" class="mx-auto max-h-48 rounded mb-2" />
-      <p class="text-sm text-gray-700">${caption}</p>
-    </div>
-  `;
+  <div class="w-full h-full bg-white rounded shadow-inner p-4">
+    <!-- Mini Blog Header -->
+    <header class="border-b pb-3 mb-3">
+      <h1 class="text-2xl font-bold text-indigo-700">automate-aig.blog</h1>
+      <p class="text-sm text-gray-500">Automation + AIG — Interactive demos by Ian B</p>
+    </header>
+
+    <!-- Blog Article -->
+    <article class="text-left">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">${caption}</h2>
+      <p class="text-xs text-gray-500 mb-3">
+        <i class="fas fa-calendar-alt mr-1"></i>${new Date().toLocaleDateString()} &nbsp;•&nbsp;
+        <i class="fas fa-user mr-1"></i> Ian B
+      </p>
+      <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-40 object-cover border" />
+      <p class="text-sm text-gray-700 leading-snug">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit tempus porttitor.
+        Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+      </p>
   //alert('✅ Blog post saved!');
   captionInput.value = '';
   captionContainer.classList.add('hidden');
