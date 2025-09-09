@@ -39,48 +39,51 @@
 
   <!-- Row 1: Image Options -->
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-    <img src="img/sample1.jpg" class="sample-img rounded shadow cursor-pointer" alt="Sample 1" />
-    <img src="img/sample2.jpg" class="sample-img rounded shadow cursor-pointer" alt="Sample 2" />
-    <img src="img/sample3.jpg" class="sample-img rounded shadow cursor-pointer" alt="Sample 3" />
+    <div class="image-box">
+    <img src="img/sample1.jpg" alt="Sample 1" class="sample-img cursor-pointer" />
+  </div>
+  <div class="image-box">
+    <img src="img/sample2.jpg" alt="Sample 2" class="sample-img cursor-pointer" />
+  </div>
+  <div class="image-box">
+    <img src="img/sample3.jpg" alt="Sample 3" class="sample-img cursor-pointer" />
+  </div>
+  <div class="image-box text-center">
+    <label for="imageUpload" class="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+    <input type="file" id="imageUpload" accept="image/*" class="text-sm" />
+  </div>
 
-    <div class="upload-box p-4 border-2 border-dashed border-gray-400 text-center rounded">
-      <label for="imageUpload" class="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
-      <input type="file" id="imageUpload" accept="image/*" class="text-sm" />
-    </div>
+    
   </div>
 
 <!-- Row 2: Image Display & Blog Preview -->
 <div class="grid md:grid-cols-3 gap-6">
-  <!-- Selected Image -->
-  <div class="selected-image">
+  <div class="preview-box">
     <h4 class="font-semibold mb-2">Selected Image</h4>
     <div id="imagePlaceholder" class="bg-gray-100 border rounded h-64 flex items-center justify-center overflow-hidden">
       <img id="selectedImage" src="" class="max-h-full max-w-full object-contain hidden" />
     </div>
   </div>
 
-  <!-- Cropped Preview + Form (Stacked) -->
-  <div class="preview-and-caption flex flex-col">
-    <div class="preview-pane mb-4">
-      <h4 class="font-semibold mb-2">Preview (Cropped)</h4>
-      <canvas id="croppedPreview" class="w-full aspect-[1280/853] bg-white border rounded"></canvas>
+  <div class="preview-box">
+    <h4 class="font-semibold mb-2">Preview (Cropped)</h4>
+    <canvas id="croppedPreview" class="w-full aspect-[1280/853] bg-white border rounded"></canvas>
+  </div>
+
+  <div class="preview-box">
+    <h4 class="font-semibold mb-2">Blog Preview</h4>
+    <div id="blogPostPreview" class="bg-gray-100 border h-64 rounded flex items-center justify-center overflow-hidden">
+      <!-- Injected blog preview -->
     </div>
+    <button id="makeBlogBtn" class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm">Make Blog Post</button>
 
-    <div class="blog-controls bg-gray-50 border rounded p-4">
-      <h4 class="font-semibold mb-2">Create Blog Post</h4>
-      <button id="makeBlogBtn" class="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 text-sm mb-3">
-        Make Blog Post
-      </button>
-
-      <div id="captionInputContainer" class="hidden">
-        <label for="caption" class="block text-sm font-medium text-gray-700 mb-1">Enter Caption:</label>
-        <input type="text" id="caption" maxlength="100" class="w-full border px-2 py-1 rounded text-sm mb-2" />
-        <button id="submitBlogBtn" class="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 text-sm">
-          Submit
-        </button>
-      </div>
+    <div id="captionInputContainer" class="hidden mt-4">
+      <label for="caption" class="block text-sm font-medium text-gray-700 mb-1">Enter Caption:</label>
+      <input type="text" id="caption" maxlength="100" class="w-full border px-2 py-1 rounded text-sm mb-2" />
+      <button id="submitBlogBtn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">Submit</button>
     </div>
   </div>
+</div>
 
   <!-- Blog Preview -->
   <div class="blog-preview">
