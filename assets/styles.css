@@ -12,6 +12,28 @@ h1 {
   color: #007bff; /* bootstrap-ish blue */
 }
 
+.sample-img {
+  transition: 0.2s ease-in-out;
+}
+
+.sample-img:hover {
+  outline: 2px solid #2563eb; /* blue-600 */
+}
+
+.upload-box input {
+  margin-top: 0.5rem;
+}
+
+#imagePlaceholder img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
 footer {
   margin-top: 3rem;
   padding: 1rem 0;
