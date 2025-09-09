@@ -1,0 +1,8 @@
+C:\Users\HP\interactive-portfolio\files.txt
+C:\Users\HP\interactive-portfolio\git-push-index.bat
+C:\Users\HP\interactive-portfolio\git-push-last-12-hrs.bat
+C:\Users\HP\interactive-portfolio\git-push-last-changed-file.bat
+C:\Users\HP\interactive-portfolio\index.html
+C:\Users\HP\interactive-portfolio\README.md
+C:\Users\HP\interactive-portfolio\assets\scripts.js
+C:\Users\HP\interactive-portfolio\assets\styles.css
