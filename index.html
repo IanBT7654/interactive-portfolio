@@ -6,6 +6,9 @@
   <title>automate-aig</title>
   <link rel="stylesheet" href="assets/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" />
+  <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
+
   
 </head>
 <body class="bg-gray-100 font-sans leading-relaxed tracking-wide text-gray-800">
@@ -51,13 +54,13 @@
     <div class="selected-image">
       <h4 class="font-semibold mb-2">Selected Image</h4>
       <div id="imagePlaceholder" class="bg-gray-100 border rounded h-64 flex items-center justify-center overflow-hidden">
-        <!-- Selected image will appear here -->
+      <img id="selectedImage" src="" class="max-h-full max-w-full object-contain hidden" />
       </div>
     </div>
 
     <div class="preview-pane">
       <h4 class="font-semibold mb-2">Preview (Cropped)</h4>
-      <canvas id="croppedPreview" class="w-full h-64 bg-white border rounded"></canvas>
+      <canvas id="croppedPreview" class="w-full aspect-[1280/853] bg-white border rounded"></canvas>
     </div>
 
     <div class="blog-preview">
