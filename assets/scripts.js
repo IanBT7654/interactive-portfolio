@@ -116,12 +116,14 @@ submitBlogBtn.addEventListener('click', async () => {
     return;
   }
 
+blogPreview.classList.add('dark');
+
   // Display result
 blogPreview.innerHTML = `
   <div class="dark bg-white dark:bg-gray-800 dark:text-gray-200 w-full h-full rounded shadow-inner p-4">
     <!-- Mini Blog Header -->
     <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
-      <h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">automate-aig.blog</h1>
+      //<h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">automate-aig.blog</h1>
       <p class="text-sm text-gray-500 dark:text-gray-400">Automation + AIG — Interactive demos by Ian B</p>
     </header>
 
