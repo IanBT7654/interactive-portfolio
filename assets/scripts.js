@@ -164,8 +164,8 @@ submitBlogBtn.addEventListener('click', async () => {
       <!-- Mini Blog Header -->
       <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
         <h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">Your Blog</h1>
-        <p class="text-sm text-gray-600 dark:text-gray-400">is live on the web already</p>
-        <p class="text-sm text-gray-600 dark:text-gray-400">scroll down for the link</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">is live on the web.</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">scroll down for the link.</p>
       </header>
 
       <!-- Blog Article -->
