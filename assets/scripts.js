@@ -1,5 +1,3 @@
-// assets/scripts.js
-
 import { supabaseClient } from './config.js';
 
 // Now you can use supabaseClient directly
@@ -21,12 +19,13 @@ const captionContainer = document.getElementById('captionInputContainer');
 const makeBlogBtn = document.getElementById('makeBlogBtn');
 const submitBlogBtn = document.getElementById('submitBlogBtn');
 const blogPreview = document.getElementById('blogPostPreview');
+const uploadDropZone = document.getElementById('uploadDropZone');
 
 let cropper = null;
 let originalFileName = '';
 
 function loadImageToPlaceholder(src) {
-  const imageEl = document.getElementById("selectedImage");
+  const imageEl = selectedImage;
   imageEl.src = src;
   imageEl.classList.remove("hidden");
 
@@ -41,8 +40,8 @@ function loadImageToPlaceholder(src) {
       zoomable: false,
       movable: true,
       crop(event) {
-        const canvas = document.getElementById("croppedPreview");
-        const croppedCanvas = cropper.getCroppedCanvas({
+        const canvas = croppedCanvas;
+        const croppedCanvasTemp = cropper.getCroppedCanvas({
           width: 1280,
           height: 853,
         });
@@ -50,12 +49,66 @@ function loadImageToPlaceholder(src) {
         canvas.width = 320;
         canvas.height = 213;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(croppedCanvasTemp, 0, 0, canvas.width, canvas.height);
       }
     });
   };
 }
 
+// Drag & Drop handlers for upload zone
+uploadDropZone.addEventListener('click', () => {
+  imageUpload.click();
+});
+
+uploadDropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadDropZone.style.borderColor = '#333';
+  uploadDropZone.style.backgroundColor = '#f0f0f0';
+});
+
+uploadDropZone.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  uploadDropZone.style.borderColor = '#aaa';
+  uploadDropZone.style.backgroundColor = 'transparent';
+});
+
+uploadDropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadDropZone.style.borderColor = '#aaa';
+  uploadDropZone.style.backgroundColor = 'transparent';
+
+  const files = e.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loadImageToPlaceholder(event.target.result);
+      };
+      reader.readAsDataURL(file);
+
+      // Sync file input with dropped file
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      imageUpload.files = dataTransfer.files;
+    } else {
+      alert('Please drop an image file.');
+    }
+  }
+});
+
+// Single 'change' listener for the file input
+imageUpload.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    originalFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      loadImageToPlaceholder(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+});
 
 makeBlogBtn.addEventListener('click', () => {
   if (!cropper) {
@@ -65,19 +118,6 @@ makeBlogBtn.addEventListener('click', () => {
   captionContainer.classList.remove('hidden');
 });
 
-imageUpload.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    originalFileName = file.name;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      loadImageToPlaceholder(event.target.result);  // ✅ use unified function
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
 submitBlogBtn.addEventListener('click', async () => {
   const caption = captionInput.value.trim();
 
@@ -85,7 +125,6 @@ submitBlogBtn.addEventListener('click', async () => {
   if (containsNaughtyWords(caption)) return alert('⚠️ Caption contains restricted words.');
 
   const blob = await new Promise((resolve) => {
-    
     const croppedCanvasTemp = cropper.getCroppedCanvas({ width: 1280, height: 853 });
     croppedCanvasTemp.toBlob(resolve, 'image/jpeg');
   });
@@ -116,10 +155,10 @@ submitBlogBtn.addEventListener('click', async () => {
     return;
   }
 
-blogPreview.classList.add('dark');
+  blogPreview.classList.add('dark');
 
   // Display result
-blogPreview.innerHTML = `
+  blogPreview.innerHTML = `
   <div class="dark bg-white dark:bg-gray-800 dark:text-gray-200 w-full h-full rounded shadow-inner p-4">
     <!-- Mini Blog Header -->
     <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
@@ -132,28 +171,25 @@ blogPreview.innerHTML = `
       <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">${caption}</h2>
       <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
         <i class="fas fa-calendar-alt mr-1"></i>${new Date().toLocaleDateString()} &nbsp;•&nbsp;
-        <i class="fas fa-user mr-1"></i> <your Domain>
+        <i class="fas fa-user mr-1"></i> &lt;your Domain&gt;
       </p>
       <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-40 object-cover border dark:border-gray-600" />
       <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        I found this is a fully featured image resizer designed to resize images for web bolgs. The preview (1280x853) can be right clicked and saved</p>
-        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        Here's the link <a href="https://automate-aig.pages.dev/" target="_blank" class="text-blue-600 underline hover:text-blue-800">https://automate-aig.pages.dev/</a></p>
-        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+        I found this is a fully featured image resizer designed to resize images for web blogs. The preview (1280x853) can be right-clicked and saved.
+      </p>
+      <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+        Here's the link <a href="https://automate-aig.pages.dev/" target="_blank" class="text-blue-600 underline hover:text-blue-800">https://automate-aig.pages.dev/</a>
+      </p>
+      <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
         Who would have thought to find something like this on a portfolio page?
-
       </p>
     </article>
   </div>
-`;
+  `;
 
-  // ✅ Now we’re *outside* the template string
   captionInput.value = '';
   captionContainer.classList.add('hidden');
   alert('✅ Blog post saved!');
-
-  captionInput.value = '';
-  captionContainer.classList.add('hidden');
 });
 
 function containsNaughtyWords(text) {
@@ -162,12 +198,7 @@ function containsNaughtyWords(text) {
   return blacklist.some(word => lower.includes(word));
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
-  const imagePlaceholder = document.getElementById("imagePlaceholder");
-  const blogPostPreview = document.getElementById("blogPostPreview");
-  const captionBox = document.getElementById("captionInputContainer");
-
   // Handle sample image clicks
   document.querySelectorAll(".sample-img").forEach(img => {
     img.addEventListener("click", () => {
@@ -175,24 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Handle image upload
-  document.getElementById("imageUpload").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      loadImageToPlaceholder(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Function to load image
-  
-
-
-  // Show caption input
-  document.getElementById("makeBlogBtn").addEventListener("click", () => {
-    captionBox.classList.remove("hidden");
+  // Show caption input on button click
+  makeBlogBtn.addEventListener("click", () => {
+    captionContainer.classList.remove("hidden");
   });
 });
 
