@@ -159,33 +159,40 @@ submitBlogBtn.addEventListener('click', async () => {
 
   // Display result
   blogPreview.innerHTML = `
-  <div class="dark bg-white dark:bg-gray-800 dark:text-gray-200 w-full h-full rounded shadow-inner p-4">
-    <!-- Mini Blog Header -->
-    <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
-      <h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">Your Blog</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">by Automation + AIG — Interactive demos</p>
-    </header>
+  <div style="background-color: rgb(127, 127, 127);" class="w-full h-full p-6 rounded shadow-inner overflow-auto">
+    <div class="bg-white dark:bg-gray-800 dark:text-gray-200 text-gray-900 w-full max-w-2xl mx-auto rounded-lg shadow p-6">
+      <!-- Mini Blog Header -->
+      <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
+        <h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">Your Blog</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400">by Automation + AIG — Interactive demos</p>
+      </header>
 
-    <!-- Blog Article -->
-    <article class="text-left">
-      <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">${caption}</h2>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-        <i class="fas fa-calendar-alt mr-1"></i>${new Date().toLocaleDateString()} &nbsp;•&nbsp;
-        <i class="fas fa-user mr-1"></i> &lt;your Domain&gt;
-      </p>
-      <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-40 object-cover border dark:border-gray-600" />
-      <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        I found this is a fully featured image resizer designed to resize images for web blogs. The preview (1280x853) can be right-clicked and saved.
-      </p>
-      <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        Here's the link <a href="https://automate-aig.pages.dev/" target="_blank" class="text-blue-600 underline hover:text-blue-800">https://automate-aig.pages.dev/</a>
-      </p>
-      <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        Who would have thought to find something like this on a portfolio page?
-      </p>
-    </article>
+      <!-- Blog Article -->
+      <article class="text-left">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">${caption}</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <i class="fas fa-calendar-alt mr-1"></i>${new Date().toLocaleDateString()} &nbsp;•&nbsp;
+          <i class="fas fa-user mr-1"></i> <your Domain>
+        </p>
+        <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-60 object-cover border dark:border-gray-600" />
+        
+        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug mb-2">
+          I found this is a fully featured image resizer designed to resize images for web blogs. The preview (1280x853) can be right-clicked and saved.
+        </p>
+        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug mb-2">
+          Here's the link 
+          <a href="https://automate-aig.pages.dev/" target="_blank" class="text-blue-600 underline hover:text-blue-800">
+            https://automate-aig.pages.dev/
+          </a>
+        </p>
+        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+          Who would have thought to find something like this on a portfolio page?
+        </p>
+      </article>
+    </div>
   </div>
-  `;
+`;
+
 
   captionInput.value = '';
   captionContainer.classList.add('hidden');
