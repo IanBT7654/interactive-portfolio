@@ -121,8 +121,8 @@ submitBlogBtn.addEventListener('click', async () => {
     <div class="w-full h-full bg-white rounded shadow-inner p-4">
       <!-- Mini Blog Header -->
       <header class="border-b pb-3 mb-3">
-        <h1 class="text-2xl font-bold text-indigo-700">automate-aig.blog</h1>
-        <p class="text-sm text-gray-500">Automation + AIG — Interactive demos by Ian B</p>
+        //<h1 class="text-2xl font-bold text-indigo-700">automate-aig.blog</h1>
+        <p class="text-sm text-gray-500">Automation + AIG — Interactive demos</p>
       </header>
 
       <!-- Blog Article -->
