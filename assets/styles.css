@@ -35,7 +35,7 @@ h1 {
 }
 
 /* Add this to your styles.css or inside <style> tags */
-.image-box {
+.image-box .preview {
   border-top: 3px solid #e5e7eb; /* Lighter top border */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* Slightly deeper shadow */
   border: 1px solid #d1d5db; /* Tailwind's border-gray-300 */
@@ -46,7 +46,7 @@ h1 {
   transition: transform 0.2s ease-in-out;
 }
 
-.image-box:hover {
+.image-box:hover .preview-box:hover {
   transform: scale(1.02); /* Tailwind's hover:scale-105 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* More elevation on hover */
 }
@@ -57,6 +57,11 @@ h1 {
   object-fit: cover;
 }
 
+/* === Uniform heights (optional fine-tune) === */
+.image-box,
+.preview-box {
+  min-height: 16rem; /* ~256px for visual consistency */
+}
 
 .hidden {
   display: none !important;
