@@ -25,31 +25,37 @@ const blogPreview = document.getElementById('blogPostPreview');
 let cropper = null;
 let originalFileName = '';
 
-function loadAndCropImage(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    selectedImage.src = reader.result;
-    selectedImage.classList.remove('hidden');
+function loadImageToPlaceholder(src) {
+  const imageEl = document.getElementById("selectedImage");
+  imageEl.src = src;
+  imageEl.classList.remove("hidden");
 
-    if (cropper) cropper.destroy();
+  if (cropper) cropper.destroy();
 
-    cropper = new Cropper(selectedImage, {
+  imageEl.onload = () => {
+    cropper = new Cropper(imageEl, {
       aspectRatio: 1280 / 853,
       viewMode: 1,
       autoCropArea: 1,
       responsive: true,
+      zoomable: false,
+      movable: true,
+      crop(event) {
+        const canvas = document.getElementById("croppedPreview");
+        const croppedCanvas = cropper.getCroppedCanvas({
+          width: 1280,
+          height: 853,
+        });
+        const ctx = canvas.getContext("2d");
+        canvas.width = 320;
+        canvas.height = 213;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
+      }
     });
   };
-  reader.readAsDataURL(file);
 }
 
-imageUpload.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    originalFileName = file.name;
-    loadAndCropImage(file);
-  }
-});
 
 makeBlogBtn.addEventListener('click', () => {
   if (!cropper) {
@@ -57,6 +63,19 @@ makeBlogBtn.addEventListener('click', () => {
     return;
   }
   captionContainer.classList.remove('hidden');
+});
+
+imageUpload.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    originalFileName = file.name;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      loadImageToPlaceholder(event.target.result);  // ✅ use unified function
+    };
+    reader.readAsDataURL(file);
+  }
 });
 
 submitBlogBtn.addEventListener('click', async () => {
@@ -142,42 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Function to load image
-  let cropper;
-
-function loadImageToPlaceholder(src) {
-  const imageEl = document.getElementById("selectedImage");
-  imageEl.src = src;
-  imageEl.classList.remove("hidden");
-
-  // Destroy old cropper if it exists
-  if (cropper) {
-    cropper.destroy();
-  }
-
-  // Wait until image loads
-  imageEl.onload = () => {
-    cropper = new Cropper(imageEl, {
-      aspectRatio: 1280 / 853,
-      viewMode: 1,
-      autoCropArea: 1,
-      responsive: true,
-      zoomable: false,
-      movable: true,
-      crop(event) {
-        const canvas = document.getElementById("croppedPreview");
-        const croppedCanvas = cropper.getCroppedCanvas({
-          width: 1280,
-          height: 853,
-        });
-        const ctx = canvas.getContext("2d");
-        canvas.width = 320;
-        canvas.height = 213;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(croppedCanvas, 0, 0, canvas.width, canvas.height);
-      }
-    });
-  };
-}
+  
 
 
   // Show caption input
