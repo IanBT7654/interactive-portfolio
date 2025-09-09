@@ -136,7 +136,7 @@ blogPreview.innerHTML = `
       </p>
       <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-40 object-cover border dark:border-gray-600" />
       <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-        I found this is a fully image resizer designed to resize images for web bolgs.</p>
+        I found this is a fully featured image resizer designed to resize images for web bolgs. The image can be right clicked and saved</p>
         <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
         Here's the link <a href="https://automate-aig.pages.dev/" target="_blank" class="text-blue-600 underline hover:text-blue-800">https://automate-aig.pages.dev/</a></p>
         <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
