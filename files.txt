@@ -1,3 +1,4 @@
+C:\Users\HP\interactive-portfolio\config.js
 C:\Users\HP\interactive-portfolio\files.txt
 C:\Users\HP\interactive-portfolio\git-push-index.bat
 C:\Users\HP\interactive-portfolio\git-push-last-12-hrs.bat
