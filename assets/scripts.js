@@ -123,7 +123,7 @@ submitBlogBtn.addEventListener('click', async () => {
       <p class="text-sm text-gray-700">${caption}</p>
     </div>
   `;
-  alert('✅ Blog post saved!');
+  //alert('✅ Blog post saved!');
   captionInput.value = '';
   captionContainer.classList.add('hidden');
 });
