@@ -42,9 +42,9 @@
       }
 
       try {
-        const { data, error } = await supabaseClient.functions.invoke('profile_js_inject', {
-          body: JSON.stringify({ featured_id: parseInt(featuredId) }),
-        });
+        const { data, error } = await supabaseClient.functions.invoke(`profile_js_inject?featured_id=${featuredId}`);
+
+        
 
         if (error) throw error;
 
