@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Blog Post</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    #blogContent {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div id="blogContent">Loading blog...</div>
+  </main>
+
+  <script>
+    (async () => {
+      const blogContainer = document.getElementById('blogContent');
+      const urlParams = new URLSearchParams(window.location.search);
+      const blogId = urlParams.get('blog_id');
+
+      if (!blogId) {
+        blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?blog_id=${encodeURIComponent(blogId)}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const blogHtml = await res.text();
+        blogContainer.innerHTML = blogHtml;
+      } catch (error) {
+        blogContainer.innerHTML = `<p style="color:red;">Failed to load blog: ${error.message}</p>`;
+      }
+    })();
+  </script>
+</body>
+</html>
