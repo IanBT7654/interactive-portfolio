@@ -4,28 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Blog Post</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 2rem;
-      color: #333;
-    }
-    #blogContent {
-      max-width: 700px;
-      margin: 0 auto;
-      background: white;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      min-height: 200px;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
-<body>
+<body class="bg-gray-100 font-sans leading-relaxed tracking-wide text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow">
+    <h1 class="text-3xl font-bold">automate-aig</h1>
+    <p class="text-sm mt-1">Automation + AIG — Interactive demo tools by Ian B</p>
+    <p class="text-sm mt-1">Email: IanB@clemssecurity.com.au</p>
+  </header>
+
+  <!-- Intro Section -->
+  <main class="max-w-3xl mx-auto mt-8">
+
+    <section class="section">
+      <h2 class="text-2xl font-semibold mb-2">👋 Welcome</h2>
+      <p>This interactive page demonstrates real, working tools powered by automation and AIG (AI Generative). Think of it as a live portfolio — everything you see here runs in-browser or in the cloud.</p>
+    </section>
+
   <main>
     <div id="blogContent">Loading blog...</div>
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-500 mt-12 mb-6">
+      &copy; 2025 Ian B | Built with GitHub, Cloudflare Pages and MS Office automation
+    </footer>
   </main>
 
   <script type="module">
