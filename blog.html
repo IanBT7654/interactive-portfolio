@@ -32,15 +32,15 @@
     (async () => {
       const blogContainer = document.getElementById('blogContent');
       const urlParams = new URLSearchParams(window.location.search);
-      const blogId = urlParams.get('blog_id');
+      const featuredId = urlParams.get('featured_id') || urlParams.get('blog_id'); // supports both
 
-      if (!blogId) {
+      if (!featuredId) {
         blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
         return;
       }
 
       try {
-        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?blog_id=${encodeURIComponent(blogId)}`);
+        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const blogHtml = await res.text();

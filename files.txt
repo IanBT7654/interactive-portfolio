@@ -2,5 +2,4 @@ C:\Users\HP\interactive-portfolio\blog.html
 C:\Users\HP\interactive-portfolio\files.txt
 C:\Users\HP\interactive-portfolio\index.html
 C:\Users\HP\interactive-portfolio\project_js_inject.txt
-C:\Users\HP\interactive-portfolio\assets\embeded.js
 C:\Users\HP\interactive-portfolio\assets\scripts.js

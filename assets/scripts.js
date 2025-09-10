@@ -169,7 +169,7 @@ const newBtn = document.createElement('button');
 newBtn.innerText = '👀 View Your Live Blog';
 newBtn.className = 'w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm mt-2';
 newBtn.addEventListener('click', () => {
-  window.open(`blog.html?blog_id=${blogId}`, '_blank');
+  window.open(`blog.html?featured_id=${blogId}`, '_blank');
 });
 
 // Append right below "Make Blog Post" button
