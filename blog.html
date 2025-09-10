@@ -28,32 +28,32 @@
     <div id="blogContent">Loading blog...</div>
   </main>
 
-  <!-- ✅ Modular script using config.js -->
   <script type="module">
-    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './assets/config.js';
+    import { supabaseClient } from '/assets/config.js';
 
-    const blogContainer = document.getElementById('blogContent');
-    const urlParams = new URLSearchParams(window.location.search);
-    const featuredId = urlParams.get('featured_id') || urlParams.get('blog_id'); // supports both ?featured_id= and ?blog_id=
+    (async () => {
+      const blogContainer = document.getElementById('blogContent');
+      const urlParams = new URLSearchParams(window.location.search);
+      const featuredId = urlParams.get('featured_id') || urlParams.get('blog_id');
 
-    if (!featuredId) {
-      blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
-    } else {
+      if (!featuredId) {
+        blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
+        return;
+      }
+
       try {
-        const response = await fetch(`${SUPABASE_URL}/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`, {
-          headers: {
-            'apikey': SUPABASE_ANON_KEY
-          }
+        const { data, error } = await supabaseClient.functions.invoke('profile_js_inject', {
+          body: JSON.stringify({ featured_id: parseInt(featuredId) }),
         });
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const blogHtml = await response.text();
-        blogContainer.innerHTML = blogHtml;
+        if (error) throw error;
+
+        // Assuming the function returns HTML as text
+        blogContainer.innerHTML = data;
       } catch (error) {
         blogContainer.innerHTML = `<p style="color:red;">Failed to load blog: ${error.message}</p>`;
-        console.error('Blog load error:', error);
       }
-    }
+    })();
   </script>
 </body>
 </html>
