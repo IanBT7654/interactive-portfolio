@@ -145,15 +145,42 @@ submitBlogBtn.addEventListener('click', async () => {
     .from('blog-images')
     .getPublicUrl(uniqueFilename).data.publicUrl;
 
-  const { error: insertError } = await supabaseClient
-    .from('blog_posts')
-    .insert([{ image_url: imageUrl, caption }]);
+  const { data: insertedData, error: insertError } = await supabaseClient
+  .from('blog_posts')
+  .insert([{ image_url: imageUrl, caption }])
+  .select('id')   // 👈 Return the ID of the inserted row
+  .single();      // 👈 Expect a single row, not an array
 
-  if (insertError) {
-    console.error('❌ DB Error:', insertError.message);
-    alert('Database insert failed.');
-    return;
-  }
+if (insertError) {
+  console.error('❌ DB Error:', insertError.message);
+  alert('Database insert failed.');
+  return;
+}
+
+const blogId = insertedData.id;
+console.log('✅ Blog saved. ID:', blogId);
+
+// Hide caption UI
+captionInput.value = '';
+captionContainer.classList.add('hidden');
+
+// Inject "View Your Live Blog" button
+const newBtn = document.createElement('button');
+newBtn.innerText = '👀 View Your Live Blog';
+newBtn.className = 'w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm mt-2';
+newBtn.addEventListener('click', () => {
+  window.open(`blog.html?blog_id=${blogId}`, '_blank');
+});
+
+// Append right below "Make Blog Post" button
+makeBlogBtn.insertAdjacentElement('afterend', newBtn);
+
+// Show preview (optional — this is your existing preview code)
+blogPreview.classList.add('dark');
+blogPreview.innerHTML = `...`; // your existing preview HTML stays the same
+
+alert('✅ Blog post saved!');
+
 
   blogPreview.classList.add('dark');
 
