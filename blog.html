@@ -40,7 +40,11 @@
       }
 
       try {
-        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`);
+        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`, {
+  headers: {
+    'Authorization': 'Bearer YOUR_ANON_KEY_HERE'
+  }
+});
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const blogHtml = await res.text();
