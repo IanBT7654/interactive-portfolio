@@ -42,7 +42,7 @@
       try {
         const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`, {
   headers: {
-    'Authorization': 'Bearer YOUR_ANON_KEY_HERE'
+    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemZkanRvcGZncWRjamZtZHRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNjkxNTMsImV4cCI6MjA2Mjk0NTE1M30.H7wt4H5fLnIJdNDcJjV8pgm-2GkXqol8DpdgGIP9Pqs'
   }
 });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
