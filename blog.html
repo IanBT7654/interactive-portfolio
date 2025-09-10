@@ -28,31 +28,32 @@
     <div id="blogContent">Loading blog...</div>
   </main>
 
-  <script>
-    (async () => {
-      const blogContainer = document.getElementById('blogContent');
-      const urlParams = new URLSearchParams(window.location.search);
-      const featuredId = urlParams.get('featured_id') || urlParams.get('blog_id'); // supports both
+  <!-- ✅ Modular script using config.js -->
+  <script type="module">
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './assets/config.js';
 
-      if (!featuredId) {
-        blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
-        return;
-      }
+    const blogContainer = document.getElementById('blogContent');
+    const urlParams = new URLSearchParams(window.location.search);
+    const featuredId = urlParams.get('featured_id') || urlParams.get('blog_id'); // supports both ?featured_id= and ?blog_id=
 
+    if (!featuredId) {
+      blogContainer.innerHTML = `<p style="color:red;">⚠️ No blog ID provided in URL.</p>`;
+    } else {
       try {
-        const res = await fetch(`https://wezfdjtopfgqdcjfmdtj.supabase.co/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`, {
-  headers: {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemZkanRvcGZncWRjamZtZHRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNjkxNTMsImV4cCI6MjA2Mjk0NTE1M30.H7wt4H5fLnIJdNDcJjV8pgm-2GkXqol8DpdgGIP9Pqs'
-  }
-});
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/profile_js_inject?featured_id=${encodeURIComponent(featuredId)}`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY
+          }
+        });
 
-        const blogHtml = await res.text();
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blogHtml = await response.text();
         blogContainer.innerHTML = blogHtml;
       } catch (error) {
         blogContainer.innerHTML = `<p style="color:red;">Failed to load blog: ${error.message}</p>`;
+        console.error('Blog load error:', error);
       }
-    })();
+    }
   </script>
 </body>
 </html>
