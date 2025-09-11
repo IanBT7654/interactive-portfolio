@@ -2,33 +2,52 @@ import { supabaseClient } from './config.js';
 
 // Elements
 const form = document.getElementById('aigEntryForm');
-const inputs = Array.from(document.querySelectorAll('.aig-numeric-input')); // your numeric inputs have this class
+const inputs = Array.from(document.querySelectorAll('.aig-numeric-input'));
 const livePreview = document.getElementById('livePreview');
 const aiErrorMsg = document.getElementById('aiErrorMessage');
 const rawErrorMsg = document.getElementById('rawErrorMessage');
 const submitBtn = document.getElementById('submitBtn');
 
-// Clear error messages
 function clearErrors() {
   aiErrorMsg.textContent = '';
   rawErrorMsg.textContent = '';
   rawErrorMsg.style.opacity = '0';
 }
 
-// Update live preview
-function updateLivePreview() {
-  const values = inputs.map(input => input.value.trim());
-  // If any input is empty or not a valid number, highlight but still show preview with what user has entered
-  const rows = `<pre>${values.join(' | ')}</pre>`;
-  livePreview.innerHTML = rows;
+// Renders fetched rows into the preview box
+async function fetchAndRenderTableRows() {
+  const { data, error } = await supabaseClient
+    .from('aig_entries')
+    .select('*')
+    .order('id', { ascending: false })
+    .limit(30);
+
+  if (error) {
+    livePreview.innerHTML = `<p class="text-red-600">❌ Failed to fetch rows: ${error.message}</p>`;
+    return;
+  }
+
+  if (!data.length) {
+    livePreview.innerHTML = `<p class="text-gray-500">No entries yet.</p>`;
+    return;
+  }
+
+  // Render as a compact block per row
+  livePreview.innerHTML = data.map(row => {
+    const { id, ...cols } = row;
+    return `
+      <div class="mb-3 p-2 bg-white border rounded shadow-sm">
+        <div class="text-xs text-gray-500 mb-1">ID: ${id}</div>
+        <pre class="text-sm">${JSON.stringify(cols, null, 2)}</pre>
+      </div>
+    `;
+  }).join('');
 }
 
-// Show AI-friendly error (always visible until new submission)
 function showAIError(message) {
   aiErrorMsg.textContent = message;
 }
 
-// Show raw error for 2 seconds then fade
 function showRawError(error) {
   rawErrorMsg.textContent = error;
   rawErrorMsg.style.opacity = '1';
@@ -38,7 +57,6 @@ function showRawError(error) {
   }, 2000);
 }
 
-// Validate inputs: all numeric and not empty
 function validateInputs() {
   for (const input of inputs) {
     if (input.value.trim() === '' || isNaN(Number(input.value))) {
@@ -57,10 +75,8 @@ async function handleSubmit(e) {
     return;
   }
 
-  // Prepare data for insert
   const rowData = {};
-  inputs.forEach((input, idx) => {
-    // assuming input names are col1, col2, ...
+  inputs.forEach((input) => {
     rowData[input.name] = Number(input.value);
   });
 
@@ -75,10 +91,10 @@ async function handleSubmit(e) {
       return;
     }
 
-    // Success: clear form and update preview
+    // Success: clear form and refresh preview
     inputs.forEach(input => (input.value = ''));
-    updateLivePreview();
     showAIError('✅ Entry submitted successfully!');
+    fetchAndRenderTableRows();
 
   } catch (err) {
     showAIError('Unexpected error occurred.');
@@ -86,12 +102,15 @@ async function handleSubmit(e) {
   }
 }
 
-// Event listeners
+// Live update on input
 inputs.forEach(input => {
-  input.addEventListener('input', updateLivePreview);
+  input.addEventListener('input', () => {
+    aiErrorMsg.textContent = '';
+    rawErrorMsg.textContent = '';
+  });
 });
 
 form.addEventListener('submit', handleSubmit);
 
-// Initialize preview
-updateLivePreview();
+// Initial preview load
+fetchAndRenderTableRows();
