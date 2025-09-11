@@ -118,7 +118,7 @@ async function handleSubmit(e) {
 
   const rowData = {};
   inputs.forEach((input) => {
-    rowData[input.name] = Number(input.value);
+    rowData[input.name] = input.value === '' ? null : Number(input.value);
   });
 
   try {
