@@ -77,6 +77,13 @@ h1 {
   display: none !important;
 }
 
+#blogContent img {
+  max-width: 60%;
+  height: auto;
+  display: block;
+  margin: 1rem auto; /* center horizontally */
+  border-radius: 8px;
+}
 
 footer {
   margin-top: 3rem;
