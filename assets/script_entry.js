@@ -1,20 +1,47 @@
 import { supabaseClient } from './config.js';
 
-// Elements
+// DOM elements
 const form = document.getElementById('aigEntryForm');
 const inputs = Array.from(document.querySelectorAll('.aig-numeric-input'));
 const livePreview = document.getElementById('livePreview');
 const aiErrorMsg = document.getElementById('aiErrorMessage');
 const rawErrorMsg = document.getElementById('rawErrorMessage');
 const submitBtn = document.getElementById('submitBtn');
+const col1Input = document.getElementById('col1');
 
+// Clear both error message containers
 function clearErrors() {
   aiErrorMsg.textContent = '';
   rawErrorMsg.textContent = '';
   rawErrorMsg.style.opacity = '0';
 }
 
-// Renders fetched rows into the preview box
+// Show a human-readable error
+function showAIError(message) {
+  aiErrorMsg.textContent = message;
+}
+
+// Show the raw error for 10 seconds
+function showRawError(error) {
+  rawErrorMsg.textContent = error;
+  rawErrorMsg.style.opacity = '1';
+  setTimeout(() => {
+    rawErrorMsg.style.transition = 'opacity 1s ease';
+    rawErrorMsg.style.opacity = '0';
+  }, 10000); // 10 seconds
+}
+
+// Validate form inputs
+function validateInputs() {
+  for (const input of inputs) {
+    if (input.value.trim() === '' || isNaN(Number(input.value))) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Fetch latest table entries and display them
 async function fetchAndRenderTableRows() {
   const { data, error } = await supabaseClient
     .from('aig_entries')
@@ -32,7 +59,6 @@ async function fetchAndRenderTableRows() {
     return;
   }
 
-  // Render as table
   const tableHTML = `
     <div class="overflow-auto">
       <table class="min-w-full border text-sm text-left text-gray-700 bg-white">
@@ -69,41 +95,18 @@ async function fetchAndRenderTableRows() {
   livePreview.innerHTML = tableHTML;
 }
 
-// Auto-fill logic when Column 1 changes
-const col1Input = document.getElementById('col1');
+// Auto-fill Columns 2–6 when Column 1 changes
 col1Input.addEventListener('input', () => {
   const base = parseInt(col1Input.value, 10);
   if (!isNaN(base) && base <= 50) {
     for (let i = 1; i < inputs.length; i++) {
-      const nextVal = base + i;
-      if (inputs[i]) inputs[i].value = nextVal;
+      if (inputs[i]) inputs[i].value = base + i;
     }
-    updateLivePreview();
+    fetchAndRenderTableRows(); // Refresh preview after fill
   }
 });
 
-function showAIError(message) {
-  aiErrorMsg.textContent = message;
-}
-
-function showRawError(error) {
-  rawErrorMsg.textContent = error;
-  rawErrorMsg.style.opacity = '1';
-  setTimeout(() => {
-    rawErrorMsg.style.transition = 'opacity 1s ease';
-    rawErrorMsg.style.opacity = '0';
-  }, 2000);
-}
-
-function validateInputs() {
-  for (const input of inputs) {
-    if (input.value.trim() === '' || isNaN(Number(input.value))) {
-      return false;
-    }
-  }
-  return true;
-}
-
+// Form submission handler
 async function handleSubmit(e) {
   e.preventDefault();
   clearErrors();
@@ -124,14 +127,33 @@ async function handleSubmit(e) {
       .insert([rowData]);
 
     if (error) {
-      showAIError('Oops! Something went wrong with your submission. Please check your data.');
+      // Show raw error
       showRawError(error.message);
+
+      // Optional: send to GROQ endpoint
+      try {
+        const aiResponse = await fetch('/api/aig_human_errors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ error: error.message }),
+        });
+
+        const aiData = await aiResponse.json();
+        if (aiData?.message) {
+          showAIError(aiData.message);
+        } else {
+          showAIError('An unexpected error occurred.');
+        }
+      } catch (groqErr) {
+        showAIError('AI explanation unavailable.');
+      }
+
       return;
     }
 
-    // Success: clear form and refresh preview
-    inputs.forEach(input => (input.value = ''));
+    // Success!
     showAIError('✅ Entry submitted successfully!');
+    inputs.forEach(input => (input.value = ''));
     fetchAndRenderTableRows();
 
   } catch (err) {
@@ -140,7 +162,7 @@ async function handleSubmit(e) {
   }
 }
 
-// Live update on input
+// Clear messages when typing again
 inputs.forEach(input => {
   input.addEventListener('input', () => {
     aiErrorMsg.textContent = '';
@@ -149,6 +171,4 @@ inputs.forEach(input => {
 });
 
 form.addEventListener('submit', handleSubmit);
-
-// Initial preview load
-fetchAndRenderTableRows();
+fetchAndRenderTableRows(); // Initial load
