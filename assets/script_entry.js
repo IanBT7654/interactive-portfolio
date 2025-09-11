@@ -104,6 +104,23 @@ function validateInputs() {
   return true;
 }
 
+// ✅ NEW: Send error to Groq function
+async function fetchHumanizedError(rawError) {
+  try {
+    const res = await fetch("https://aig-project.pages.dev/api/aig_human_errors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: rawError })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data.humanized || 'AI explanation not available.';
+  } catch (err) {
+    return 'AI error interpretation failed.';
+  }
+}
+
 async function handleSubmit(e) {
   e.preventDefault();
   clearErrors();
@@ -124,8 +141,11 @@ async function handleSubmit(e) {
       .insert([rowData]);
 
     if (error) {
-      showAIError('Oops! Something went wrong with your submission. Please check your data.');
       showRawError(error.message);
+
+      // ✅ NEW: Send to Groq for explanation
+      const humanExplanation = await fetchHumanizedError(error.message);
+      showAIError(humanExplanation);
       return;
     }
 
@@ -135,8 +155,8 @@ async function handleSubmit(e) {
     fetchAndRenderTableRows();
 
   } catch (err) {
-    showAIError('Unexpected error occurred.');
     showRawError(err.message);
+    showAIError('Unexpected error occurred.');
   }
 }
 
