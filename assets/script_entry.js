@@ -111,10 +111,10 @@ async function handleSubmit(e) {
   e.preventDefault();
   clearErrors();
 
-  if (!validateInputs()) {
+  /*if (!validateInputs()) {
     showAIError('Please enter valid numeric values in all columns.');
     return;
-  }
+  }*/
 
   const rowData = {};
   inputs.forEach((input) => {
