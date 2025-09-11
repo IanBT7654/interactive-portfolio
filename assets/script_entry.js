@@ -69,6 +69,19 @@ async function fetchAndRenderTableRows() {
   livePreview.innerHTML = tableHTML;
 }
 
+// Auto-fill logic when Column 1 changes
+const col1Input = document.getElementById('col1');
+col1Input.addEventListener('input', () => {
+  const base = parseInt(col1Input.value, 10);
+  if (!isNaN(base) && base <= 50) {
+    for (let i = 1; i < inputs.length; i++) {
+      const nextVal = base + i;
+      if (inputs[i]) inputs[i].value = nextVal;
+    }
+    updateLivePreview();
+  }
+});
+
 function showAIError(message) {
   aiErrorMsg.textContent = message;
 }
