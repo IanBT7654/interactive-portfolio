@@ -32,16 +32,41 @@ async function fetchAndRenderTableRows() {
     return;
   }
 
-  // Render as a compact block per row
-  livePreview.innerHTML = data.map(row => {
-    const { id, ...cols } = row;
-    return `
-      <div class="mb-3 p-2 bg-white border rounded shadow-sm">
-        <div class="text-xs text-gray-500 mb-1">ID: ${id}</div>
-        <pre class="text-sm">${JSON.stringify(cols, null, 2)}</pre>
-      </div>
-    `;
-  }).join('');
+  // Render as table
+  const tableHTML = `
+    <div class="overflow-auto">
+      <table class="min-w-full border text-sm text-left text-gray-700 bg-white">
+        <thead class="bg-gray-100 sticky top-0 z-10">
+          <tr>
+            <th class="border px-2 py-1">ID</th>
+            <th class="border px-2 py-1">Col1</th>
+            <th class="border px-2 py-1">Col2</th>
+            <th class="border px-2 py-1">Col3</th>
+            <th class="border px-2 py-1">Col4</th>
+            <th class="border px-2 py-1">Col5</th>
+            <th class="border px-2 py-1">Col6</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data
+            .map(row => `
+              <tr class="hover:bg-indigo-50">
+                <td class="border px-2 py-1">${row.id}</td>
+                <td class="border px-2 py-1">${row.col1}</td>
+                <td class="border px-2 py-1">${row.col2}</td>
+                <td class="border px-2 py-1">${row.col3}</td>
+                <td class="border px-2 py-1">${row.col4}</td>
+                <td class="border px-2 py-1">${row.col5}</td>
+                <td class="border px-2 py-1">${row.col6}</td>
+              </tr>
+            `)
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  livePreview.innerHTML = tableHTML;
 }
 
 function showAIError(message) {
