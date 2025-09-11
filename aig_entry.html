@@ -1,3 +1,5 @@
+aig_entry html
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth" >
 <head>
@@ -7,6 +9,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="assets/styles.css" />
+  <script type="module" src="assets/scripts.js"></script>
 </head>
 <body class="bg-gray-100 font-sans leading-relaxed tracking-wide text-gray-800 min-h-screen flex flex-col">
 
@@ -78,14 +81,8 @@
     &copy; 2025 Ian B | Built with GitHub, Cloudflare Pages and MS Office automation
   </footer>
 
+  
   <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-    // Replace these with your project info:
-    const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'
-    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'
-
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('entryForm');
     const livePreview = document.getElementById('livePreview');
