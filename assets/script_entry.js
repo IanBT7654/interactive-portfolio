@@ -8,8 +8,6 @@ const rawErrorMsg = document.getElementById('rawErrorMessage');
 const submitBtn = document.getElementById('submitBtn');
 const col1Input = document.getElementById('col1');
 
-const groqApiUrl = 'https://tuktukjust3.functions.supabase.co/groq_explain';
-
 // Clear both error message containers
 function clearErrors() {
   aiErrorMsg.textContent = '';
@@ -105,7 +103,7 @@ async function handleSubmit(e) {
   e.preventDefault();
   clearErrors();
 
-  // Optionally re-enable validation
+  // Optional input validation
   // if (!validateInputs()) {
   //   showAIError('Please enter valid numeric values in all columns.');
   //   return;
@@ -125,24 +123,26 @@ async function handleSubmit(e) {
       showRawError(error.message);
 
       // Ask GROQ to explain the error
- try {
-  const { data, error: groqError } = await supabaseClient.functions.invoke('groq_explain', {
-    body: { query: error.message }
-  });
+      try {
+        const { data: groqData, error: groqError } = await supabaseClient.functions.invoke('groq_explain', {
+          body: { query: error.message }
+        });
 
-  if (groqError) {
-    showAIError('AI explanation failed.');
-    showRawError(groqError.message);
-  } else if (data?.explanation) {
-    showAIError(data.explanation);
-  } else {
-    showAIError('Unexpected AI response.');
-  }
-} catch (groqErr) {
-  console.warn('Groq call failed:', groqErr);
-  showAIError('⚠️ AI explanation unavailable.');
-}
+        if (groqError) {
+          showAIError('AI explanation failed.');
+          showRawError(groqError.message);
+        } else if (groqData?.explanation) {
+          showAIError(groqData.explanation);
+        } else {
+          showAIError('Unexpected AI response.');
+        }
+      } catch (groqErr) {
+        console.warn('Groq call failed:', groqErr);
+        showAIError('⚠️ AI explanation unavailable.');
+      }
 
+      return;
+    }
 
     // All good!
     showAIError('✅ Entry submitted successfully!');
