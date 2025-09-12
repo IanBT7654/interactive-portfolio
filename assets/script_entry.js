@@ -1,5 +1,6 @@
 import { supabaseClient } from './config.js';
 
+
 // DOM elements
 const form = document.getElementById('aigEntryForm');
 const inputs = Array.from(document.querySelectorAll('.aig-numeric-input'));
@@ -8,6 +9,8 @@ const aiErrorMsg = document.getElementById('aiErrorMessage');
 const rawErrorMsg = document.getElementById('rawErrorMessage');
 const submitBtn = document.getElementById('submitBtn');
 const col1Input = document.getElementById('col1');
+const groqApiUrl = 'https://tuktukjust3.functions.supabase.co/groq_explain';
+
 
 // Clear both error message containers
 function clearErrors() {
@@ -132,7 +135,7 @@ async function handleSubmit(e) {
 
       // Optional: send to GROQ endpoint
       try {
-        const aiResponse = await fetch('https://aig-project.pages.dev/api/aig_human_errors', {
+        const aiResponse = await fetch(groqApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ error_message: error.message }),
