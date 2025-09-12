@@ -139,8 +139,8 @@ async function handleSubmit(e) {
         });
 
         const aiData = await aiResponse.json();
-        if (aiData?.message) {
-          showAIError(aiData.message);
+        if (aiData?.explanation) {
+          showAIError(aiData.explanation);
         } else {
           showAIError('An unexpected error occurred.');
         }
