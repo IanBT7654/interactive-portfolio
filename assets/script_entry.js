@@ -135,7 +135,7 @@ async function handleSubmit(e) {
         const aiResponse = await fetch('https://aig-project.pages.dev/api/aig_human_errors', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ error: error.message }),
+          body: JSON.stringify({ error_message: error.message }),
         });
 
         const aiData = await aiResponse.json();
