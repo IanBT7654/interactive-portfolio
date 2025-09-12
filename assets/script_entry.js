@@ -126,15 +126,19 @@ async function handleSubmit(e) {
 
       // Ask GROQ to explain the error
       try {
-        const aiResponse = await fetch(groqApiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Supabase-Project-Ref': 'tuktukjust3',
-            Authorization: 'Bearer ${GROQ_API_KEY}'
-          },
-          body: JSON.stringify({ query: error.message })
-        });
+const { data, error: groqError } = await supabaseClient.functions.invoke('groq_explain', {
+  body: { query: error.message }
+});
+
+if (groqError) {
+  showAIError('AI explanation failed.');
+  showRawError(groqError.message);
+} else if (data?.explanation) {
+  showAIError(data.explanation);
+} else {
+  showAIError('Unexpected AI response.');
+}
+
 
         const aiData = await aiResponse.json();
         if (aiData?.explanation) {
