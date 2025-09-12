@@ -1,7 +1,5 @@
 import { supabaseClient } from './config.js';
 
-
-// DOM elements
 const form = document.getElementById('aigEntryForm');
 const inputs = Array.from(document.querySelectorAll('.aig-numeric-input'));
 const livePreview = document.getElementById('livePreview');
@@ -9,8 +7,8 @@ const aiErrorMsg = document.getElementById('aiErrorMessage');
 const rawErrorMsg = document.getElementById('rawErrorMessage');
 const submitBtn = document.getElementById('submitBtn');
 const col1Input = document.getElementById('col1');
-const groqApiUrl = 'https://tuktukjust3.functions.supabase.co/groq_explain';
 
+const groqApiUrl = 'https://tuktukjust3.functions.supabase.co/groq_explain';
 
 // Clear both error message containers
 function clearErrors() {
@@ -19,7 +17,7 @@ function clearErrors() {
   rawErrorMsg.style.opacity = '0';
 }
 
-// Show a human-readable error
+// Show a human-readable explanation
 function showAIError(message) {
   aiErrorMsg.textContent = message;
 }
@@ -31,20 +29,15 @@ function showRawError(error) {
   setTimeout(() => {
     rawErrorMsg.style.transition = 'opacity 1s ease';
     rawErrorMsg.style.opacity = '0';
-  }, 10000); // 10 seconds
+  }, 10000);
 }
 
-// Validate form inputs
+// Validate form inputs (optional — currently disabled)
 function validateInputs() {
-  for (const input of inputs) {
-    if (input.value.trim() === '' || isNaN(Number(input.value))) {
-      return false;
-    }
-  }
-  return true;
+  return inputs.every(input => input.value.trim() !== '' && !isNaN(Number(input.value)));
 }
 
-// Fetch latest table entries and display them
+// Fetch latest rows
 async function fetchAndRenderTableRows() {
   const { data, error } = await supabaseClient
     .from('aig_entries')
@@ -77,19 +70,17 @@ async function fetchAndRenderTableRows() {
           </tr>
         </thead>
         <tbody>
-          ${data
-            .map(row => `
-              <tr class="hover:bg-indigo-50">
-                <td class="border px-2 py-1">${row.id}</td>
-                <td class="border px-2 py-1">${row.col1}</td>
-                <td class="border px-2 py-1">${row.col2}</td>
-                <td class="border px-2 py-1">${row.col3}</td>
-                <td class="border px-2 py-1">${row.col4}</td>
-                <td class="border px-2 py-1">${row.col5}</td>
-                <td class="border px-2 py-1">${row.col6}</td>
-              </tr>
-            `)
-            .join('')}
+          ${data.map(row => `
+            <tr class="hover:bg-indigo-50">
+              <td class="border px-2 py-1">${row.id}</td>
+              <td class="border px-2 py-1">${row.col1}</td>
+              <td class="border px-2 py-1">${row.col2}</td>
+              <td class="border px-2 py-1">${row.col3}</td>
+              <td class="border px-2 py-1">${row.col4}</td>
+              <td class="border px-2 py-1">${row.col5}</td>
+              <td class="border px-2 py-1">${row.col6}</td>
+            </tr>
+          `).join('')}
         </tbody>
       </table>
     </div>
@@ -98,29 +89,30 @@ async function fetchAndRenderTableRows() {
   livePreview.innerHTML = tableHTML;
 }
 
-// Auto-fill Columns 2–6 when Column 1 changes
+// Autofill columns 2–6 from col1
 col1Input.addEventListener('input', () => {
   const base = parseInt(col1Input.value, 10);
   if (!isNaN(base) && base <= 50) {
     for (let i = 1; i < inputs.length; i++) {
-      if (inputs[i]) inputs[i].value = base + i;
+      inputs[i].value = base + i;
     }
     fetchAndRenderTableRows(); // Refresh preview after fill
   }
 });
 
-// Form submission handler
+// Submit handler
 async function handleSubmit(e) {
   e.preventDefault();
   clearErrors();
 
-  /*if (!validateInputs()) {
-    showAIError('Please enter valid numeric values in all columns.');
-    return;
-  }*/
+  // Optionally re-enable validation
+  // if (!validateInputs()) {
+  //   showAIError('Please enter valid numeric values in all columns.');
+  //   return;
+  // }
 
   const rowData = {};
-  inputs.forEach((input) => {
+  inputs.forEach(input => {
     rowData[input.name] = input.value === '' ? null : Number(input.value);
   });
 
@@ -130,42 +122,44 @@ async function handleSubmit(e) {
       .insert([rowData]);
 
     if (error) {
-      // Show raw error
       showRawError(error.message);
 
-      // Optional: send to GROQ endpoint
+      // Ask GROQ to explain the error
       try {
         const aiResponse = await fetch(groqApiUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: error.message }),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ query: error.message })
         });
 
         const aiData = await aiResponse.json();
         if (aiData?.explanation) {
           showAIError(aiData.explanation);
         } else {
-          showAIError('An unexpected error occurred.');
+          showAIError('⚠️ An unexpected error occurred.');
         }
       } catch (groqErr) {
-        showAIError('AI explanation unavailable.');
+        console.warn('Groq call failed:', groqErr);
+        showAIError('⚠️ AI explanation unavailable.');
       }
 
       return;
     }
 
-    // Success!
+    // All good!
     showAIError('✅ Entry submitted successfully!');
     inputs.forEach(input => (input.value = ''));
     fetchAndRenderTableRows();
 
   } catch (err) {
-    showAIError('Unexpected error occurred.');
+    showAIError('❌ Unexpected error occurred.');
     showRawError(err.message);
   }
 }
 
-// Clear messages when typing again
+// Clear errors while typing
 inputs.forEach(input => {
   input.addEventListener('input', () => {
     aiErrorMsg.textContent = '';
@@ -174,4 +168,4 @@ inputs.forEach(input => {
 });
 
 form.addEventListener('submit', handleSubmit);
-fetchAndRenderTableRows(); // Initial load
+fetchAndRenderTableRows(); // Load data initially
