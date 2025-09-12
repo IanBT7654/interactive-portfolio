@@ -131,6 +131,7 @@ async function handleSubmit(e) {
           headers: {
             'Content-Type': 'application/json',
             'X-Supabase-Project-Ref': 'tuktukjust3',
+            Authorization: 'Bearer ${GROQ_API_KEY}'
           },
           body: JSON.stringify({ query: error.message })
         });
