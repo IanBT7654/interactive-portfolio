@@ -129,7 +129,8 @@ async function handleSubmit(e) {
         const aiResponse = await fetch(groqApiUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Supabase-Project-Ref': 'tuktukjust3',
           },
           body: JSON.stringify({ query: error.message })
         });
