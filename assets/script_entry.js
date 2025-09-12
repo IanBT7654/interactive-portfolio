@@ -138,7 +138,7 @@ async function handleSubmit(e) {
         const aiResponse = await fetch(groqApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ error_message: error.message }),
+          body: JSON.stringify({ query: error.message }),
         });
 
         const aiData = await aiResponse.json();
