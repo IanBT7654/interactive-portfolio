@@ -125,34 +125,24 @@ async function handleSubmit(e) {
       showRawError(error.message);
 
       // Ask GROQ to explain the error
-      try {
-const { data, error: groqError } = await supabaseClient.functions.invoke('groq_explain', {
-  body: { query: error.message }
-});
+ try {
+  const { data, error: groqError } = await supabaseClient.functions.invoke('groq_explain', {
+    body: { query: error.message }
+  });
 
-if (groqError) {
-  showAIError('AI explanation failed.');
-  showRawError(groqError.message);
-} else if (data?.explanation) {
-  showAIError(data.explanation);
-} else {
-  showAIError('Unexpected AI response.');
+  if (groqError) {
+    showAIError('AI explanation failed.');
+    showRawError(groqError.message);
+  } else if (data?.explanation) {
+    showAIError(data.explanation);
+  } else {
+    showAIError('Unexpected AI response.');
+  }
+} catch (groqErr) {
+  console.warn('Groq call failed:', groqErr);
+  showAIError('⚠️ AI explanation unavailable.');
 }
 
-
-        const aiData = await aiResponse.json();
-        if (aiData?.explanation) {
-          showAIError(aiData.explanation);
-        } else {
-          showAIError('⚠️ An unexpected error occurred.');
-        }
-      } catch (groqErr) {
-        console.warn('Groq call failed:', groqErr);
-        showAIError('⚠️ AI explanation unavailable.');
-      }
-
-      return;
-    }
 
     // All good!
     showAIError('✅ Entry submitted successfully!');
