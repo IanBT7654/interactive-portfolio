@@ -1,4 +1,4 @@
 C:\Users\HP\interactive-portfolio\aig_entry.html
+C:\Users\HP\interactive-portfolio\blog.html
 C:\Users\HP\interactive-portfolio\files.txt
-C:\Users\HP\interactive-portfolio\assets\config.js
-C:\Users\HP\interactive-portfolio\assets\script_entry.js
+C:\Users\HP\interactive-portfolio\index.html
