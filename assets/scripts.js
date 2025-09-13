@@ -209,7 +209,7 @@ alert('✅ Blog post saved!');
         </p>
         <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug mb-2">
           Here's the link 
-          <a href="https://automate-aig.pages.dev/blog.html" target="_blank" class="text-blue-600 underline hover:text-blue-800">
+          <a href="https://automate-aig.pages.dev/blog.html?featured_id=${blogId}" target="_blank" class="text-blue-600 underline hover:text-blue-800">
             https://automate-aig.pages.dev/blog.html
           </a>
         </p>
