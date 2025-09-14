@@ -43,18 +43,12 @@ form.addEventListener('submit', async (e) => {
 
 async function generateDocumentWithAI(prompt) {
   try {
-    const response = await fetch('https://wezfdjtopfgqdcjfmdtj.functions.supabase.co/generate_doc', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ prompt })
+    const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
+      body: { prompt }
     });
-
-    const data = await response.json();
-    if (!response.ok) {
-      console.error('Function Error:', data);
-      throw new Error(data.error || 'AI generation failed');
+    if (error) {
+      console.error('Function Error:', error);
+      throw new Error(error.message || 'AI generation failed');
     }
     return data.result;
   } catch (err) {
@@ -62,7 +56,6 @@ async function generateDocumentWithAI(prompt) {
     return null;
   }
 }
-
 
 // 📩 Handle Email Send
 sendEmailBtn.addEventListener('click', async () => {
