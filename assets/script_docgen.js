@@ -40,28 +40,29 @@ form.addEventListener('submit', async (e) => {
 });
 
 // 🧠 Simulated AI Generator (Replace with real fetch to OpenAI/Groq)
+
 async function generateDocumentWithAI(prompt) {
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://wezfdjtopfgqdcjfmdtj.functions.supabase.co/generate_doc', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer YOUR_OPENAI_API_KEY',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        model: 'gpt-4',
-        messages: [{ role: 'user', content: `Generate a formal document: ${prompt}` }],
-        temperature: 0.7
-      })
+      body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || null;
+    if (!response.ok) {
+      console.error('Function Error:', data);
+      throw new Error(data.error || 'AI generation failed');
+    }
+    return data.result;
   } catch (err) {
     console.error('AI generation error:', err);
     return null;
   }
 }
+
 
 // 📩 Handle Email Send
 sendEmailBtn.addEventListener('click', async () => {
@@ -75,7 +76,7 @@ sendEmailBtn.addEventListener('click', async () => {
 
   // Upload PDF to Supabase
   const filename = `doc-${Date.now()}.pdf`;
-  const { data: uploadData, error: uploadError } = await supabase.storage
+  const { data: uploadData, error: uploadError } = await supabaseClient.storage
     .from('documents')
     .upload(filename, pdfBlob, {
       cacheControl: '3600',
@@ -88,7 +89,7 @@ sendEmailBtn.addEventListener('click', async () => {
     return alert('Failed to upload PDF.');
   }
 
-  const { publicURL } = supabase.storage.from('documents').getPublicUrl(filename);
+  const { publicURL } = supabaseClient.storage.from('documents').getPublicUrl(filename);
   if (!publicURL) return alert('Could not get public URL.');
 
   // Call Supabase Edge Function to trigger Resend email
@@ -117,7 +118,7 @@ sendEmailBtn.addEventListener('click', async () => {
 // ⏱️ Polling Tracker
 function trackEmailStatus(message_id) {
   const interval = setInterval(async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('email_tracking')
       .select('*')
       .eq('message_id', message_id)
