@@ -1,2 +1,5 @@
+C:\Users\HP\interactive-portfolio\aig_entry.html
+C:\Users\HP\interactive-portfolio\document_generator.html
 C:\Users\HP\interactive-portfolio\files.txt
 C:\Users\HP\interactive-portfolio\index.html
+C:\Users\HP\interactive-portfolio\assets\script_docgen.js
