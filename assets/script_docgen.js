@@ -82,8 +82,14 @@ sendEmailBtn.addEventListener('click', async () => {
     return alert('Failed to upload PDF.');
   }
 
-  const { publicURL } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
-  if (!publicURL) return alert('Could not get public URL.');
+const { data: urlData, error: urlError } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
+if (urlError || !urlData?.publicUrl) {
+  console.error('❌ Failed to get public URL:', urlError);
+  return alert('Could not get public URL.');
+}
+
+const publicURL = urlData.publicUrl;
+
 
   // Call Supabase Edge Function to trigger Resend email
   const res = await fetch('/functions/v1/send-email', {
