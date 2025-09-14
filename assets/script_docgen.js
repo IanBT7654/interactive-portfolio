@@ -30,6 +30,8 @@ form.addEventListener('submit', async (e) => {
 
   const generatedText = await generateDocumentWithAI(promptText);
   console.log('AI generation:', promptText);
+  console.log('AI generation:', generatedText);
+
   if (!generatedText) return alert('AI failed to generate document.');
 
   // 📝 Show in preview
