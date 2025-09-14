@@ -70,7 +70,7 @@ sendEmailBtn.addEventListener('click', async () => {
   // Upload PDF to Supabase
   const filename = `doc-${Date.now()}.pdf`;
   const { data: uploadData, error: uploadError } = await supabaseClient.storage
-    .from('documents')
+    .from('aig-docos')
     .upload(filename, pdfBlob, {
       cacheControl: '3600',
       upsert: false,
@@ -82,7 +82,7 @@ sendEmailBtn.addEventListener('click', async () => {
     return alert('Failed to upload PDF.');
   }
 
-  const { publicURL } = supabaseClient.storage.from('documents').getPublicUrl(filename);
+  const { publicURL } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
   if (!publicURL) return alert('Could not get public URL.');
 
   // Call Supabase Edge Function to trigger Resend email
