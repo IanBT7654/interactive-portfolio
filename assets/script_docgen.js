@@ -26,7 +26,10 @@ form.addEventListener('submit', async (e) => {
   if (!promptText || !email) return alert('Please enter both prompt and email.');
 
   // ✨ Call AI
+  console.log('001');
+
   const generatedText = await generateDocumentWithAI(promptText);
+  console.log('AI generation:', promptText);
   if (!generatedText) return alert('AI failed to generate document.');
 
   // 📝 Show in preview
