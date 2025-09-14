@@ -1,6 +1,6 @@
 // assets/script_docgen.js
 
-import { supabase } from './config.js';
+import { supabaseClient  } from './config.js';
 
 // DOM elements
 const form = document.getElementById('docForm');
