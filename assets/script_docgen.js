@@ -42,7 +42,9 @@ form.addEventListener('submit', async (e) => {
   }
 
   // 📝 Insert generated content (preserves line breaks)
-  docOutput.textContent = generatedText;
+  //docOutput.textContent = generatedText;
+  docOutput.innerHTML = generatedText.replace(/\n/g, '<br>');
+
 
   // Show preview section
   previewSection.classList.remove('hidden');
@@ -202,5 +204,6 @@ function trackEmailStatus(message_id) {
 
 // ⬇️ Local PDF download
 downloadBtn.addEventListener('click', () => {
+ console.log ("dpf content 001", docOutput);
   html2pdf().from(docOutput).save(`Document_${Date.now()}.pdf`);
 });
