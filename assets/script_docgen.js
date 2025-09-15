@@ -18,6 +18,15 @@ const statusSent = document.getElementById('status-sent');
 const statusDelivered = document.getElementById('status-delivered');
 const statusOpened = document.getElementById('status-opened');
 
+// Waits for next paint + an optional delay (default: 4000ms)
+async function waitForStableDOM(delay = 4000) {
+  return new Promise(resolve => {
+    requestAnimationFrame(() => {
+      setTimeout(resolve, delay);
+    });
+  });
+}
+
 // ✨ Handle Form Submit
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -103,12 +112,15 @@ if (!docContent || bounds.height === 0 || bounds.width === 0) {
 
   // Wait for DOM to render
   //await new Promise(resolve => setTimeout(resolve, 400));
-  async function waitForPaint(minDelay = 300) {
+/*  async function waitForPaint(minDelay = 300) {
   return new Promise(resolve => {
     requestAnimationFrame(() => {
       setTimeout(resolve, minDelay);
     });
-  });
+  });  */
+console.log("⏳ Waiting for DOM to stabilize before generating PDF...");
+await waitForStableDOM(4000);
+
 }
 
 
@@ -224,5 +236,13 @@ downloadBtn.addEventListener('click', () => {
  console.log("📄 HTML content:", docOutput.innerHTML);
  console.log("📏 docOutput size:", docOutput.getBoundingClientRect());
 
+  //html2pdf().from(docOutput).save(`Document_${Date.now()}.pdf`);
+
+  (async () => {
+  console.log("⏳ Waiting before generating local PDF...");
+  await waitForStableDOM(4000);
+
   html2pdf().from(docOutput).save(`Document_${Date.now()}.pdf`);
+})();
+
 });
