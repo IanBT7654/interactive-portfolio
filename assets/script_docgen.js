@@ -113,7 +113,7 @@ async function generatePdfIfNeeded() {
 
   generatedPdfUrl = data.url;
   console.log("✅ PDF generated and cached:", generatedPdfUrl);
-  window.open(generatedPdfUrl, '_blank');
+  
   return generatedPdfUrl;
 }
 
@@ -155,13 +155,13 @@ sendEmailBtn.addEventListener('click', async () => {
 downloadBtn.addEventListener('click', async () => {
   try {
     const pdfUrl = await generatePdfIfNeeded();
-
-    const link = document.createElement('a');
+    window.open(generatedPdfUrl, '_blank');
+    /*const link = document.createElement('a');
     link.href = pdfUrl;
     link.download = `Document_${Date.now()}.pdf`;
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    document.body.removeChild(link); */
   } catch (err) {
     console.error('Download error:', err);
     alert(err.message || 'Failed to download PDF.');
