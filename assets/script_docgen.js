@@ -89,11 +89,13 @@ Debug Bot`;
 // 📩 Send Email + PDF Upload
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
-  const docContent = docOutput.textContent; // keep consistent with textContent
+  const docContent = docOutput.innerHTML.trim();
+const bounds = docOutput.getBoundingClientRect();
 
-  if (!docContent || !email) {
-    return alert('Missing content or email.');
-  }
+if (!docContent || bounds.height === 0 || bounds.width === 0) {
+  return alert('Document is empty or not visible.');
+}
+
 
   // Ensure docOutput is visible
   docOutput.style.display = 'block';
