@@ -1,7 +1,7 @@
 import { supabaseClient } from './config.js';
 
 // Debug toggle: true = use dummy data, false = call real AI function
-const USE_DUMMY_DATA = false;
+const USE_DUMMY_DATA = true;
 
 // DOM elements
 const form = document.getElementById('docForm');
