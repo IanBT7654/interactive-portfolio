@@ -125,11 +125,14 @@ sendEmailBtn.addEventListener('click', async () => {
   try {
     const publicUrl = await generatePdfIfNeeded();
 
-    const res = await fetch('/functions/v1/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, file_url: publicUrl })
-    });
+    const { data, error } = await supabaseClient.functions.invoke('send-email', {
+  body: { email, file_url: publicUrl }
+});
+
+if (error) {
+  console.error('Send email failed:', error);
+  return alert('Email sending failed.');
+}
 
     const result = await res.json();
 
