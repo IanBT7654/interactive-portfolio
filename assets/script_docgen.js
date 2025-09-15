@@ -1,6 +1,7 @@
-// assets/script_docgen.js
-
 import { supabaseClient } from './config.js';
+
+// Debug toggle: true = use dummy data, false = call real AI function
+const USE_DUMMY_DATA = true;
 
 // DOM elements
 const form = document.getElementById('docForm');
@@ -28,9 +29,16 @@ form.addEventListener('submit', async (e) => {
     return alert('Please enter both prompt and email.');
   }
 
-  const generatedText = await generateDocumentWithAI(promptText);
-  if (!generatedText) {
-    return alert('AI failed to generate document.');
+  let generatedText;
+
+  if (USE_DUMMY_DATA) {
+    // Bypass AI call, inject dummy text
+    generatedText = `Dummy generated document content.\nSecond line of dummy content.\nPrompt was: "${promptText}"`;
+  } else {
+    generatedText = await generateDocumentWithAI(promptText);
+    if (!generatedText) {
+      return alert('AI failed to generate document.');
+    }
   }
 
   // 📝 Insert generated content (preserves line breaks)
@@ -62,7 +70,7 @@ async function generateDocumentWithAI(prompt) {
 // 📩 Send Email + PDF Upload
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
-  const docContent = docOutput.textContent;
+  const docContent = docOutput.textContent; // keep consistent with textContent
 
   if (!docContent || !email) {
     return alert('Missing content or email.');

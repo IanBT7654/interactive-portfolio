@@ -8,6 +8,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link rel="stylesheet" href="assets/styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+<style>
+  .font-mono {
+    font-family: 'Roboto Mono', monospace;
+  }
+</style>
+
 </head>
 <body class="bg-gray-100 font-sans leading-relaxed tracking-wide text-gray-800 min-h-screen flex flex-col">
 
@@ -40,7 +47,19 @@
     <section id="previewSection" class="bg-white rounded-lg shadow p-6 hidden">
       <h2 class="text-xl font-semibold mb-4">2️⃣ Document Preview</h2>
 
-      <div id="docOutput" class="border rounded p-4 bg-gray-50 text-sm leading-relaxed font-mono whitespace-pre-wrap"></div>
+      <!--<div id="docOutput" class="border rounded p-4 bg-gray-50 text-sm leading-relaxed font-mono whitespace-pre-wrap"></div> -->
+<div id="docOutput" style="
+  background: white;
+  color: black;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 20px;
+  white-space: pre-wrap;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+">
+</div>
 
       <div class="mt-6 flex gap-4">
         <button id="downloadBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
