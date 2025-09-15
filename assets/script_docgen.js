@@ -57,17 +57,41 @@ async function generateDocumentWithAI(prompt) {
   }
 }
 
-// 📩 Handle Email Send
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
   const docContent = docOutput.innerText;
 
   if (!docContent || !email) return alert('Missing content or email.');
 
-  // Convert to PDF
-  const pdfBlob = await html2pdf().from(docOutput).outputPdf('blob');
+  // ✅ Ensure docOutput is visible and rendered
+  docOutput.style.display = 'block';
 
-  // Upload PDF to Supabase
+  // ✅ Wait a short delay to let the DOM render
+  await new Promise(resolve => setTimeout(resolve, 300));
+
+  // ✅ TEST: Save to file locally before upload
+  // Uncomment for debugging if needed
+  // await html2pdf().from(docOutput).save();
+
+  // ✅ Generate PDF blob safely
+  const pdfBlob = await html2pdf()
+    .set({
+      margin: 10,
+      filename: 'document.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { useCORS: true, scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .from(docOutput)
+    .outputPdf('blob');
+
+  if (!pdfBlob || pdfBlob.size === 0) {
+    console.error('⚠️ Empty PDF blob generated.');
+    alert('PDF generation failed — content may be hidden or invalid.');
+    return;
+  }
+
+  // ✅ Upload PDF to Supabase
   const filename = `doc-${Date.now()}.pdf`;
   const { data: uploadData, error: uploadError } = await supabaseClient.storage
     .from('aig-docos')
@@ -82,23 +106,29 @@ sendEmailBtn.addEventListener('click', async () => {
     return alert('Failed to upload PDF.');
   }
 
-const { data: urlData, error: urlError } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
-if (urlError || !urlData?.publicUrl) {
-  console.error('❌ Failed to get public URL:', urlError);
-  return alert('Could not get public URL.');
-}
+  const { data: urlData, error: urlError } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
+  if (urlError || !urlData?.publicUrl) {
+    console.error('❌ Failed to get public URL:', urlError);
+    return alert('Could not get public URL.');
+  }
 
-const publicURL = urlData.publicUrl;
+  const publicURL = urlData.publicUrl;
 
-
-  // Call Supabase Edge Function to trigger Resend email
+  // ✅ Send email
   const res = await fetch('/functions/v1/send-email', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, file_url: publicURL })
   });
 
-  const result = await res.json();
+  let result;
+  try {
+    result = await res.json();
+  } catch (err) {
+    console.error('Failed to parse JSON:', err);
+    return alert('Unexpected server response.');
+  }
+
   if (!res.ok) {
     console.error('Send email failed:', result);
     return alert('Email sending failed.');
@@ -110,7 +140,6 @@ const publicURL = urlData.publicUrl;
   statusDelivered.textContent = `📬 Delivered: (waiting...)`;
   statusOpened.textContent = `📖 Opened: (waiting...)`;
 
-  // Start tracking status
   trackEmailStatus(message_id);
 });
 
