@@ -35,7 +35,9 @@ form.addEventListener('submit', async (e) => {
   if (!generatedText) return alert('AI failed to generate document.');
 
   // 📝 Show in preview
-  docOutput.innerHTML = '<pre class="doc-text">${generatedText}</pre>';
+  docOutput.textContent = generatedText;
+
+
   previewSection.classList.remove('hidden');
 });
 
@@ -83,6 +85,8 @@ sendEmailBtn.addEventListener('click', async () => {
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     })
     .from(docOutput)
+console.log('📄 PDF Source:', docOutput.innerHTML);
+
     .outputPdf('blob');
 
   if (!pdfBlob || pdfBlob.size === 0) {
