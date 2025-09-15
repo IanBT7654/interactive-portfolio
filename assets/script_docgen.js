@@ -204,6 +204,8 @@ function trackEmailStatus(message_id) {
 
 // ⬇️ Local PDF download
 downloadBtn.addEventListener('click', () => {
- console.log ("dpf content 001", docOutput);
+ console.log("📄 HTML content:", docOutput.innerHTML);
+ console.log("📏 docOutput size:", docOutput.getBoundingClientRect());
+
   html2pdf().from(docOutput).save(`Document_${Date.now()}.pdf`);
 });
