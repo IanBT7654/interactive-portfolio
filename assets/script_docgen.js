@@ -1,6 +1,6 @@
 // assets/script_docgen.js
 
-import { supabaseClient  } from './config.js';
+import { supabaseClient } from './config.js';
 
 // DOM elements
 const form = document.getElementById('docForm');
@@ -17,41 +17,41 @@ const statusSent = document.getElementById('status-sent');
 const statusDelivered = document.getElementById('status-delivered');
 const statusOpened = document.getElementById('status-opened');
 
-// Handle Form Submit
+// ✨ Handle Form Submit
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   const promptText = docPrompt.value.trim();
   const email = recipientEmail.value.trim();
 
-  if (!promptText || !email) return alert('Please enter both prompt and email.');
-
-  // ✨ Call AI
-  console.log('001');
+  if (!promptText || !email) {
+    return alert('Please enter both prompt and email.');
+  }
 
   const generatedText = await generateDocumentWithAI(promptText);
-  console.log('AI generation:', promptText);
-  console.log('AI generation:', generatedText);
+  if (!generatedText) {
+    return alert('AI failed to generate document.');
+  }
 
-  if (!generatedText) return alert('AI failed to generate document.');
-
-  // 📝 Show in preview
+  // 📝 Insert generated content (preserves line breaks)
   docOutput.textContent = generatedText;
 
-
+  // Show preview section
   previewSection.classList.remove('hidden');
 });
 
-// 🧠 Simulated AI Generator (Replace with real fetch to OpenAI/Groq)
-
+// 🧠 Call Supabase edge function (AI → text)
 async function generateDocumentWithAI(prompt) {
   try {
     const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
       body: { prompt }
     });
+
     if (error) {
       console.error('Function Error:', error);
       throw new Error(error.message || 'AI generation failed');
     }
+
     return data.result;
   } catch (err) {
     console.error('AI generation error:', err);
@@ -59,23 +59,25 @@ async function generateDocumentWithAI(prompt) {
   }
 }
 
+// 📩 Send Email + PDF Upload
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
-  const docContent = docOutput.innerHTML;
+  const docContent = docOutput.textContent;
 
-  if (!docContent || !email) return alert('Missing content or email.');
+  if (!docContent || !email) {
+    return alert('Missing content or email.');
+  }
 
-  // ✅ Ensure docOutput is visible and rendered
+  // Ensure docOutput is visible
   docOutput.style.display = 'block';
 
-  // ✅ Wait a short delay to let the DOM render
+  // Wait for DOM to render
   await new Promise(resolve => setTimeout(resolve, 300));
 
-  // ✅ TEST: Save to file locally before upload
-  // Uncomment for debugging if needed
+  // ✅ For debugging: Uncomment to test locally
   // await html2pdf().from(docOutput).save();
 
-  // ✅ Generate PDF blob safely
+  // ✅ Generate PDF blob
   const pdfBlob = await html2pdf()
     .set({
       margin: 10,
@@ -85,17 +87,16 @@ sendEmailBtn.addEventListener('click', async () => {
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     })
     .from(docOutput)
-console.log('📄 PDF Source:', docOutput.innerHTML);
-
     .outputPdf('blob');
+
+  console.log('📄 PDF Source:', docOutput.textContent);
 
   if (!pdfBlob || pdfBlob.size === 0) {
     console.error('⚠️ Empty PDF blob generated.');
-    alert('PDF generation failed — content may be hidden or invalid.');
-    return;
+    return alert('PDF generation failed — content may be hidden or invalid.');
   }
 
-  // ✅ Upload PDF to Supabase
+  // Upload to Supabase
   const filename = `doc-${Date.now()}.pdf`;
   const { data: uploadData, error: uploadError } = await supabaseClient.storage
     .from('aig-docos')
@@ -110,19 +111,22 @@ console.log('📄 PDF Source:', docOutput.innerHTML);
     return alert('Failed to upload PDF.');
   }
 
-  const { data: urlData, error: urlError } = supabaseClient.storage.from('aig-docos').getPublicUrl(filename);
-  if (urlError || !urlData?.publicUrl) {
+  // ✅ Get public URL
+  const { publicUrl, error: urlError } = supabaseClient
+    .storage
+    .from('aig-docos')
+    .getPublicUrl(filename);
+
+  if (urlError || !publicUrl) {
     console.error('❌ Failed to get public URL:', urlError);
     return alert('Could not get public URL.');
   }
 
-  const publicURL = urlData.publicUrl;
-
-  // ✅ Send email
+  // Send email via edge function
   const res = await fetch('/functions/v1/send-email', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, file_url: publicURL })
+    body: JSON.stringify({ email, file_url: publicUrl })
   });
 
   let result;
@@ -139,6 +143,8 @@ console.log('📄 PDF Source:', docOutput.innerHTML);
   }
 
   const { message_id } = result;
+
+  // Show status
   statusSection.classList.remove('hidden');
   statusSent.textContent = `📤 Sent: ${new Date().toLocaleTimeString()}`;
   statusDelivered.textContent = `📬 Delivered: (waiting...)`;
@@ -147,7 +153,7 @@ console.log('📄 PDF Source:', docOutput.innerHTML);
   trackEmailStatus(message_id);
 });
 
-// ⏱️ Polling Tracker
+// 🔄 Email status polling
 function trackEmailStatus(message_id) {
   const interval = setInterval(async () => {
     const { data, error } = await supabaseClient
@@ -169,7 +175,7 @@ function trackEmailStatus(message_id) {
   }, 4000);
 }
 
-// ⬇️ Download PDF
+// ⬇️ Local PDF download
 downloadBtn.addEventListener('click', () => {
   html2pdf().from(docOutput).save(`Document_${Date.now()}.pdf`);
 });
