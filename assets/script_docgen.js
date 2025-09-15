@@ -49,7 +49,24 @@ form.addEventListener('submit', async (e) => {
 });
 
 // 🧠 Call Supabase edge function (AI → text)
+const USE_DUMMY_DATA = true;
+
 async function generateDocumentWithAI(prompt) {
+  if (USE_DUMMY_DATA) {
+    console.log('⚠️ Using dummy data');
+    return `📝 Dummy Generated Document
+
+This is a simulated AI document for debugging purposes.
+
+Line breaks are respected.
+- Item one
+- Item two
+- Item three
+
+Regards,
+Debug Bot`;
+  }
+
   try {
     const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
       body: { prompt }
