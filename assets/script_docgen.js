@@ -128,7 +128,7 @@ await waitForStableDOM(4000);
   // await html2pdf().from(docOutput).save();
 
   // ✅ Generate PDF blob
-  await waitForPaint(200);
+  //await waitForPaint(200);
   
   if (bounds.height === 0) {
     console.warn('⚠️ docOutput has no height — PDF may be blank.');
