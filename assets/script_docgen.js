@@ -91,7 +91,9 @@ sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
   const docContent = docOutput.innerHTML.trim();
 const bounds = docOutput.getBoundingClientRect();
-
+docOutput.style.display = 'block';
+// Wait for paint + layout
+await waitForPaint(200);
 if (!docContent || bounds.height === 0 || bounds.width === 0) {
   return alert('Document is empty or not visible.');
 }
@@ -101,7 +103,15 @@ if (!docContent || bounds.height === 0 || bounds.width === 0) {
   docOutput.style.display = 'block';
 
   // Wait for DOM to render
-  await new Promise(resolve => setTimeout(resolve, 400));
+  //await new Promise(resolve => setTimeout(resolve, 400));
+  async function waitForPaint(minDelay = 100) {
+  return new Promise(resolve => {
+    requestAnimationFrame(() => {
+      setTimeout(resolve, minDelay);
+    });
+  });
+}
+
 
   // ✅ For debugging: Uncomment to test locally
   // await html2pdf().from(docOutput).save();
