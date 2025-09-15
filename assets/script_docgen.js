@@ -44,7 +44,7 @@ form.addEventListener('submit', async (e) => {
   // 📝 Insert generated content (preserves line breaks)
   //docOutput.textContent = generatedText;
   docOutput.innerHTML = generatedText.replace(/\n/g, '<br>');
-  await waitForPaint(200);
+
 
   // Show preview section
   previewSection.classList.remove('hidden');
@@ -103,7 +103,7 @@ if (!docContent || bounds.height === 0 || bounds.width === 0) {
 
   // Wait for DOM to render
   //await new Promise(resolve => setTimeout(resolve, 400));
-  async function waitForPaint(minDelay = 100) {
+  async function waitForPaint(minDelay = 300) {
   return new Promise(resolve => {
     requestAnimationFrame(() => {
       setTimeout(resolve, minDelay);
