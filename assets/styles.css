@@ -85,6 +85,17 @@ h1 {
   border-radius: 8px;
 }
 
+#docOutput {
+  font-family: monospace;
+  white-space: pre-wrap;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+
 footer {
   margin-top: 3rem;
   padding: 1rem 0;
