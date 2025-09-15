@@ -1,4 +1,5 @@
 C:\Users\HP\interactive-portfolio\document_generator.html
 C:\Users\HP\interactive-portfolio\files.txt
 C:\Users\HP\interactive-portfolio\assets\script_docgen.js
+C:\Users\HP\interactive-portfolio\assets\script_entry.js
 C:\Users\HP\interactive-portfolio\assets\styles.css

@@ -1,3 +1,4 @@
+// script_entry.js
 import { supabaseClient } from './config.js';
 
 const form = document.getElementById('aigEntryForm');
