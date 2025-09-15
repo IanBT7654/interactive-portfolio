@@ -99,40 +99,23 @@ Debug Bot`;
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
   const docContent = docOutput.innerHTML.trim();
-const bounds = docOutput.getBoundingClientRect();
+  const bounds = docOutput.getBoundingClientRect();
 
-
-if (!docContent || bounds.height === 0 || bounds.width === 0) {
-  return alert('Document is empty or not visible.');
-}
-
+  if (!docContent || bounds.height === 0 || bounds.width === 0) {
+    return alert('Document is empty or not visible.');
+  }
 
   // Ensure docOutput is visible
   docOutput.style.display = 'block';
 
-  // Wait for DOM to render
-  //await new Promise(resolve => setTimeout(resolve, 400));
-/*  async function waitForPaint(minDelay = 300) {
-  return new Promise(resolve => {
-    requestAnimationFrame(() => {
-      setTimeout(resolve, minDelay);
-    });
-  });  */
-console.log("⏳ Waiting for DOM to stabilize before generating PDF...");
-await waitForStableDOM(4000);
+  // Wait for DOM to render completely before generating PDF
+  console.log("⏳ Waiting for DOM to stabilize before generating PDF...");
+  await waitForStableDOM(4000); // 4s delay + next paint
 
-}
-
-
-  // ✅ For debugging: Uncomment to test locally
-  // await html2pdf().from(docOutput).save();
-
-  // ✅ Generate PDF blob
-  //await waitForPaint(200);
-  
   if (bounds.height === 0) {
     console.warn('⚠️ docOutput has no height — PDF may be blank.');
   }
+
   const pdfBlob = await html2pdf()
     .set({
       margin: 10,
@@ -207,6 +190,7 @@ await waitForStableDOM(4000);
 
   trackEmailStatus(message_id);
 });
+
 
 // 🔄 Email status polling
 function trackEmailStatus(message_id) {
