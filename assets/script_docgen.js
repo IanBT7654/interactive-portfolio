@@ -49,7 +49,7 @@ form.addEventListener('submit', async (e) => {
 });
 
 // 🧠 Call Supabase edge function (AI → text)
-const USE_DUMMY_DATA = true;
+
 
 async function generateDocumentWithAI(prompt) {
   if (USE_DUMMY_DATA) {
