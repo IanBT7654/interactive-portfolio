@@ -99,7 +99,7 @@ async function generatePdfIfNeeded() {
 
   console.log("⏳ Sending HTML to Supabase Edge Function to generate PDF...");
 
-  const { data, error } = await supabaseClient.functions.invoke('generate_pdf_from_html', {
+  const { data, error } = await supabaseClient.functions.invoke('generate_pdf', {
     body: {
       html: htmlContent,
       filename: `document-${Date.now()}`
