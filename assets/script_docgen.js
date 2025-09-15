@@ -204,6 +204,12 @@ function trackEmailStatus(message_id) {
 
 // ⬇️ Local PDF download
 downloadBtn.addEventListener('click', () => {
+ // Make sure content is visible and rendered
+ docOutput.style.display = 'block';
+
+ // Force a small delay to allow full DOM paint
+ await new Promise(resolve => setTimeout(resolve, 200));
+
  console.log("📄 HTML content:", docOutput.innerHTML);
  console.log("📏 docOutput size:", docOutput.getBoundingClientRect());
 
