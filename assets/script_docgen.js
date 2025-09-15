@@ -91,9 +91,8 @@ sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
   const docContent = docOutput.innerHTML.trim();
 const bounds = docOutput.getBoundingClientRect();
-docOutput.style.display = 'block';
-// Wait for paint + layout
-await waitForPaint(200);
+
+
 if (!docContent || bounds.height === 0 || bounds.width === 0) {
   return alert('Document is empty or not visible.');
 }
@@ -117,6 +116,11 @@ if (!docContent || bounds.height === 0 || bounds.width === 0) {
   // await html2pdf().from(docOutput).save();
 
   // ✅ Generate PDF blob
+  await waitForPaint(200);
+  const bounds = docOutput.getBoundingClientRect();
+  if (bounds.height === 0) {
+    console.warn('⚠️ docOutput has no height — PDF may be blank.');
+  }
   const pdfBlob = await html2pdf()
     .set({
       margin: 10,
