@@ -44,7 +44,7 @@ form.addEventListener('submit', async (e) => {
   // 📝 Insert generated content (preserves line breaks)
   //docOutput.textContent = generatedText;
   docOutput.innerHTML = generatedText.replace(/\n/g, '<br>');
-
+  await waitForPaint(200);
 
   // Show preview section
   previewSection.classList.remove('hidden');
