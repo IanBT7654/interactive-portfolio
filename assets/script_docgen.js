@@ -117,7 +117,7 @@ if (!docContent || bounds.height === 0 || bounds.width === 0) {
 
   // ✅ Generate PDF blob
   await waitForPaint(200);
-  const bounds = docOutput.getBoundingClientRect();
+  
   if (bounds.height === 0) {
     console.warn('⚠️ docOutput has no height — PDF may be blank.');
   }
