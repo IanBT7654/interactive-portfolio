@@ -35,7 +35,7 @@ form.addEventListener('submit', async (e) => {
   if (!generatedText) return alert('AI failed to generate document.');
 
   // 📝 Show in preview
-  docOutput.innerText = generatedText;
+  docOutput.innerHTML = '<pre class="doc-text">${generatedText}</pre>';
   previewSection.classList.remove('hidden');
 });
 
@@ -59,7 +59,7 @@ async function generateDocumentWithAI(prompt) {
 
 sendEmailBtn.addEventListener('click', async () => {
   const email = recipientEmail.value.trim();
-  const docContent = docOutput.innerText;
+  const docContent = docOutput.innerHTML;
 
   if (!docContent || !email) return alert('Missing content or email.');
 
