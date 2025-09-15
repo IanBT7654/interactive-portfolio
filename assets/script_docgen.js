@@ -113,6 +113,7 @@ async function generatePdfIfNeeded() {
 
   generatedPdfUrl = data.url;
   console.log("✅ PDF generated and cached:", generatedPdfUrl);
+  window.open(generatedPdfUrl, '_blank');
   return generatedPdfUrl;
 }
 
