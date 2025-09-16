@@ -143,85 +143,43 @@ async function generatePdfIfNeeded() {
 
 function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
-  const lines = aiText.split('\n');
 
-  let html = '';
-  let inList = false;
-
-  lines.forEach((line) => {
-    const trimmed = line.trim();
-
-    if (trimmed.match(/^### (.*)/)) {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
-      html += `<h3 style="font-size: 18px; margin-bottom: 8px;">${RegExp.$1}</h3>`;
-    } else if (trimmed.match(/^## (.*)/)) {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
-      html += `<h2 style="font-size: 20px; margin-bottom: 10px;">${RegExp.$1}</h2>`;
-    } else if (trimmed.match(/^# (.*)/)) {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
-      html += `<h1 style="font-size: 22px; margin-bottom: 12px;">${RegExp.$1}</h1>`;
-    } else if (trimmed.match(/^- (.*)/)) {
-      if (!inList) {
-        inList = true;
-        html += '<ul style="margin-left: 20px; margin-bottom: 16px;">';
-      }
-      let item = RegExp.$1;
-      item = item
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>');
-      html += `<li>${item}</li>`;
-    } else if (trimmed === '') {
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
-      html += '<p style="margin-bottom: 16px;"></p>';
-    } else {
-      let paragraph = trimmed
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>');
-      if (inList) {
-        html += '</ul>';
-        inList = false;
-      }
-      html += `<p style="margin-bottom: 16px;">${paragraph}</p>`;
-    }
-  });
-
-  if (inList) {
-    html += '</ul>';
-    inList = false;
-  }
+  // Basic Markdown to HTML converter
+  const htmlFormattedContent = aiText
+    .replace(/^### (.*$)/gim, '<h3 style="font-size: 18px; margin-bottom: 8px;">$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2 style="font-size: 20px; margin-bottom: 10px;">$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1 style="font-size: 22px; margin-bottom: 12px;">$1</h1>')
+    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    .replace(/\n{2,}/g, '</p><p>') // Paragraph breaks
+    .replace(/\n/g, '<br>');
 
   const finalHtml = `
-    <div style="width: 100%; max-width: 750px; margin: auto; font-family: 'Roboto Mono', monospace; color: #000; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+    <div style="font-family: 'Roboto Mono', monospace; font-size: 14px; color: #000; background: white; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05); width: 100%; max-width: 750px; margin: auto;">
+    
       <!-- HEADER -->
       <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 24px 32px;">
         <h1 style="margin: 0; font-size: 24px;">${title}</h1>
-        <p style="margin: 4px 0 0; font-size: 14px;">Generated using AI on ${new Date().toLocaleDateString()}</p>
+        <p style="margin-top: 4px; font-size: 14px;">Generated using AI on ${new Date().toLocaleDateString()}</p>
       </div>
+
       <!-- BODY -->
       <div style="padding: 32px;">
-        ${html}
+        <p>${htmlFormattedContent}</p>
       </div>
+
       <!-- FOOTER -->
       <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 16px 32px; text-align: center; border-top: 1px solid #ccc;">
         &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
       </div>
+
     </div>
   `;
 
   return finalHtml;
 }
+
 
 
 
