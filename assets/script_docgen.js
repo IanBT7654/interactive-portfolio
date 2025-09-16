@@ -63,7 +63,6 @@ form.addEventListener('submit', async (e) => {
 
 // 🧠 Generate text from AI (Supabase Edge Function)
 async function generateDocumentWithAI(prompt) {
-async function generateDocumentWithAI(prompt) {
   if (USE_DUMMY_DATA) {
     console.log('⚠️ Using dummy data');
     return `
@@ -144,63 +143,76 @@ async function generatePdfIfNeeded() {
 
 function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
-
   const lines = aiText.split('\n');
 
   let html = '';
   let inList = false;
 
   lines.forEach((line) => {
-    line = line.trim();
+    const trimmed = line.trim();
 
-    if (line.match(/^### (.*)/)) {
-      if (inList) { html += '</ul>'; inList = false; }
+    if (trimmed.match(/^### (.*)/)) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
       html += `<h3 style="font-size: 18px; margin-bottom: 8px;">${RegExp.$1}</h3>`;
-    } else if (line.match(/^## (.*)/)) {
-      if (inList) { html += '</ul>'; inList = false; }
+    } else if (trimmed.match(/^## (.*)/)) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
       html += `<h2 style="font-size: 20px; margin-bottom: 10px;">${RegExp.$1}</h2>`;
-    } else if (line.match(/^# (.*)/)) {
-      if (inList) { html += '</ul>'; inList = false; }
+    } else if (trimmed.match(/^# (.*)/)) {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
       html += `<h1 style="font-size: 22px; margin-bottom: 12px;">${RegExp.$1}</h1>`;
-    } else if (line.match(/^- (.*)/)) {
+    } else if (trimmed.match(/^- (.*)/)) {
       if (!inList) {
         inList = true;
         html += '<ul style="margin-left: 20px; margin-bottom: 16px;">';
       }
       let item = RegExp.$1;
-      // Inline formatting inside list item
       item = item
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>');
       html += `<li>${item}</li>`;
-    } else if (line === '') {
-      if (inList) { html += '</ul>'; inList = false; }
+    } else if (trimmed === '') {
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
       html += '<p style="margin-bottom: 16px;"></p>';
     } else {
-      let paragraph = line
+      let paragraph = trimmed
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>');
-      if (inList) { html += '</ul>'; inList = false; }
+      if (inList) {
+        html += '</ul>';
+        inList = false;
+      }
       html += `<p style="margin-bottom: 16px;">${paragraph}</p>`;
     }
   });
 
-  if (inList) { html += '</ul>'; inList = false; }
+  if (inList) {
+    html += '</ul>';
+    inList = false;
+  }
 
   const finalHtml = `
     <div style="width: 100%; max-width: 750px; margin: auto; font-family: 'Roboto Mono', monospace; color: #000; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
-      
       <!-- HEADER -->
       <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 24px 32px;">
         <h1 style="margin: 0; font-size: 24px;">${title}</h1>
         <p style="margin: 4px 0 0; font-size: 14px;">Generated using AI on ${new Date().toLocaleDateString()}</p>
       </div>
-      
       <!-- BODY -->
       <div style="padding: 32px;">
         ${html}
       </div>
-
       <!-- FOOTER -->
       <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 16px 32px; text-align: center; border-top: 1px solid #ccc;">
         &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
@@ -210,6 +222,7 @@ function renderBrandedPDFDocument(aiText = '') {
 
   return finalHtml;
 }
+
 
 
 
