@@ -175,7 +175,7 @@ function renderBrandedPDFDocument(aiText = '') {
     .replace(/\n/g, '<br>');
 
   const finalHtml = `
-    <div style="font-family: 'Roboto Mono', monospace; font-size: 14px; color: #000; background: white; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05); width: 100%; max-width: 750px; margin: auto;">
+    <div style="font-family: 'Roboto Mono', monospace; font-size: 14px; color: #000; background: white; border: 1px solid #ccc; border-radius: 8px; overflow: visible; box-shadow: 0 0 10px rgba(0,0,0,0.05); width: 100%; max-width: 750px; margin: auto;">
     
       <!-- HEADER -->
       <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 24px 32px;">
