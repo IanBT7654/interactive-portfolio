@@ -53,7 +53,9 @@ form.addEventListener('submit', async (e) => {
   }
 
   // Insert generated content (preserves line breaks)
-  docOutput.innerHTML = generatedText.replace(/\n/g, '<br>');
+  //docOutput.innerHTML = generatedText.replace(/\n/g, '<br>');
+  docOutput.innerHTML = renderBrandedPDFDocument(generatedText);
+
 
   // Show preview
   previewSection.classList.remove('hidden');
@@ -61,9 +63,30 @@ form.addEventListener('submit', async (e) => {
 
 // 🧠 Generate text from AI (Supabase Edge Function)
 async function generateDocumentWithAI(prompt) {
+async function generateDocumentWithAI(prompt) {
   if (USE_DUMMY_DATA) {
     console.log('⚠️ Using dummy data');
-    return `📝 Dummy Generated Document\n\nThis is a simulated AI document for debugging purposes.\n\nLine breaks are respected.\n- Item one\n- Item two\n- Item three\n\nRegards,\nDebug Bot`;
+    return `
+# Monthly Report
+
+**Client:** ACME Corporation  
+**Date:** September 2025
+
+## Summary
+
+This document provides a breakdown of services rendered and payment details.
+
+### Services Rendered
+- AI Document Generation
+- Email Tracking Integration
+- PDF Export Setup
+
+**Total Amount:** $2000
+
+---
+
+*Prompt used:* "${prompt}"
+`;
   }
 
   try {
@@ -82,6 +105,7 @@ async function generateDocumentWithAI(prompt) {
     return null;
   }
 }
+
 
 // 🧾 Shared function: Generate PDF from HTML if not already generated
 async function generatePdfIfNeeded() {
@@ -116,6 +140,78 @@ async function generatePdfIfNeeded() {
   
   return generatedPdfUrl;
 }
+
+
+function renderBrandedPDFDocument(aiText = '') {
+  const title = 'Automate-AIG Generated Document';
+
+  const lines = aiText.split('\n');
+
+  let html = '';
+  let inList = false;
+
+  lines.forEach((line) => {
+    line = line.trim();
+
+    if (line.match(/^### (.*)/)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h3 style="font-size: 18px; margin-bottom: 8px;">${RegExp.$1}</h3>`;
+    } else if (line.match(/^## (.*)/)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h2 style="font-size: 20px; margin-bottom: 10px;">${RegExp.$1}</h2>`;
+    } else if (line.match(/^# (.*)/)) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h1 style="font-size: 22px; margin-bottom: 12px;">${RegExp.$1}</h1>`;
+    } else if (line.match(/^- (.*)/)) {
+      if (!inList) {
+        inList = true;
+        html += '<ul style="margin-left: 20px; margin-bottom: 16px;">';
+      }
+      let item = RegExp.$1;
+      // Inline formatting inside list item
+      item = item
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+      html += `<li>${item}</li>`;
+    } else if (line === '') {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += '<p style="margin-bottom: 16px;"></p>';
+    } else {
+      let paragraph = line
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<p style="margin-bottom: 16px;">${paragraph}</p>`;
+    }
+  });
+
+  if (inList) { html += '</ul>'; inList = false; }
+
+  const finalHtml = `
+    <div style="width: 100%; max-width: 750px; margin: auto; font-family: 'Roboto Mono', monospace; color: #000; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+      
+      <!-- HEADER -->
+      <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 24px 32px;">
+        <h1 style="margin: 0; font-size: 24px;">${title}</h1>
+        <p style="margin: 4px 0 0; font-size: 14px;">Generated using AI on ${new Date().toLocaleDateString()}</p>
+      </div>
+      
+      <!-- BODY -->
+      <div style="padding: 32px;">
+        ${html}
+      </div>
+
+      <!-- FOOTER -->
+      <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 16px 32px; text-align: center; border-top: 1px solid #ccc;">
+        &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
+      </div>
+    </div>
+  `;
+
+  return finalHtml;
+}
+
+
 
 // 📩 Send email with PDF attached
 sendEmailBtn.addEventListener('click', async () => {
