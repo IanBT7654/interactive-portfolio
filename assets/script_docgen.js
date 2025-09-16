@@ -142,7 +142,10 @@ This document provides a breakdown of services rendered and payment details.
 
 
 async function generatePdfClientSide() {
-  const element = docOutput;
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = renderBrandedPDFDocument(docOutput.textContent || '');
+
+  const printableElement = wrapper.firstElementChild;
 
   const opt = {
     margin:       0,
@@ -152,9 +155,10 @@ async function generatePdfClientSide() {
     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
 
-  console.log("📄 Generating PDF from DOM element...");
-  await html2pdf().set(opt).from(element).save();
+  console.log("📄 Generating PDF from parsed element...");
+  await html2pdf().set(opt).from(printableElement).save();
 }
+
 
 
 function renderBrandedPDFDocument(aiText = '') {
