@@ -108,6 +108,7 @@ This document provides a breakdown of services rendered and payment details.
 
 // 🧾 Shared function: Generate PDF from HTML if not already generated
 /* async function generatePdfIfNeeded() {
+send to fuction - not using this anymore because it can't do formatting
   if (generatedPdfUrl) {
     console.log("♻️ Reusing cached PDF:", generatedPdfUrl);
     return generatedPdfUrl;
