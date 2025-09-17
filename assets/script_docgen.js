@@ -289,37 +289,6 @@ downloadBtn.addEventListener('click', async () => {
   }
 });
 
-async function generateBasicPdf() {
-  // Create a minimal test div with some basic formatted content
-  const testDiv = document.createElement('div');
-  testDiv.style.fontFamily = "'Roboto Mono', monospace";
-  testDiv.style.fontSize = '16px';
-  testDiv.style.color = '#000';
-  testDiv.style.backgroundColor = '#fff';
-  testDiv.style.padding = '20px';
-  testDiv.style.width = '500px';
-  testDiv.style.border = '1px solid #ccc';
-  testDiv.innerHTML = `
-    <h1 style="font-size: 24px; margin-bottom: 12px;">Test Document</h1>
-    <p>This is a <strong>basic</strong> PDF test.</p>
-    <p>Line 2 of the test document.</p>
-  `;
-
-  document.body.appendChild(testDiv);  // append so it's rendered (needed for html2canvas)
-
-  const options = {
-    margin: 0.5,
-    filename: `basic-test-${Date.now()}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter' }
-  };
-
-  await html2pdf().set(options).from(testDiv).save();
-
-  document.body.removeChild(testDiv);  // cleanup after generating PDF
-}
-
 
 
 // 🔄 Poll for email delivery/open status
