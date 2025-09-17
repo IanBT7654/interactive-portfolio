@@ -67,7 +67,7 @@ function renderBrandedPDFDocument(aiText = '') {
         <p style="margin-top: 4px; font-size: 14px;">Generated on ${new Date().toLocaleDateString()}</p>
       </div>
       <div style="padding: 32px;">
-        <p>${htmlFormattedContent}</p>
+        ${htmlFormattedContent.split('\n').map(line => `<p style="margin:8px 0;">${line}</p>`).join('')}
       </div>
       <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 16px 32px; text-align: center; border-top: 1px solid #ccc;">
         &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
