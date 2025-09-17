@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minimal PDF Test</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <div id="helloContent" style="padding: 20px; font-size: 16px; background: white;">
+    <h1>Hello world</h1>
+    <p>This is a test PDF with minimal content.</p>
+  </div>
+
+  <button onclick="downloadMinimalPDF()">Download PDF</button>
+
+  <script>
+    async function downloadMinimalPDF() {
+      const element = document.getElementById('helloContent');
+
+      const opt = {
+        margin: 0.5,
+        filename: 'minimal-test.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      console.log("📄 Generating minimal PDF...");
+      await html2pdf().set(opt).from(element).save();
+    }
+  </script>
+
+</body>
+</html>
