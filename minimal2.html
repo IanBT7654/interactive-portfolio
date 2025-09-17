@@ -49,6 +49,8 @@
   </div>
 
   <script>
+    const USE_DUMMY_DATA = true;
+
     const form = document.getElementById('docForm');
     const docPrompt = document.getElementById('docPrompt');
     const recipientEmail = document.getElementById('recipientEmail');
@@ -56,31 +58,52 @@
     const previewSection = document.getElementById('previewSection');
     const downloadBtn = document.getElementById('downloadBtn');
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  console.log('⚠️ [001] Submit handler started');
 
-      const promptText = docPrompt.value.trim();
-      const email = recipientEmail.value.trim();
+  const promptText = docPrompt.value.trim();
+  const email = recipientEmail.value.trim();
 
-      if (!promptText || !email) {
-        return alert('Enter both prompt and email.');
-      }
+  if (!promptText || !email) {
+    return alert('Please enter both prompt and email.');
+  }
 
-      const dummyText = `# Title\n\nThis is a dummy document.\nPrompt: "${promptText}"`;
+  let generatedText;
 
-      // Insert formatted HTML
-      docOutput.innerHTML = renderBrandedPDFDocument(dummyText);
+  if (USE_DUMMY_DATA) {
+    console.log('⚠️ [002] Using dummy data');
+    generatedText = `Dummy generated document content.\nSecond line of dummy content.\nPrompt was: "${promptText}"`;
+  } else {
+    console.log('⚠️ [003] Attempting to call generateDocumentWithAI (not expected in minimal)');
+    generatedText = await generateDocumentWithAI(promptText);
+    if (!generatedText) {
+      return alert('AI failed to generate document.');
+    }
+  }
 
-      previewSection.classList.remove('hidden');
+  // Convert to branded HTML
+  const brandedHtml = renderBrandedPDFDocument(generatedText);
+  console.log('⚠️ [004] Generated branded HTML length:', brandedHtml.length);
 
-      // Optional: scroll to preview
-      previewSection.scrollIntoView({ behavior: 'smooth' });
-    });
+  // Insert into DOM
+  docOutput.innerHTML = brandedHtml;
 
-    downloadBtn.addEventListener('click', async () => {
-      await generateBasicPdf();
-    });
+  // Force DOM reflow (in case html2pdf renders before styles apply)
+  docOutput.offsetHeight;
 
+  // Reveal preview section
+  previewSection.classList.remove('hidden');
+  console.log('⚠️ [005] Preview section shown');
+
+  // Log current docOutput innerHTML
+  console.log('⚠️ [006] docOutput.innerHTML:', docOutput.innerHTML.slice(0, 300) + '...');
+});
+
+  downloadBtn.addEventListener('click', async () => {
+  console.log("🧾 Download button clicked");
+  await generateBasicPdf();
+});
     function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
 
@@ -139,4 +162,4 @@
 
 </body>
 </html>
-111
+444
