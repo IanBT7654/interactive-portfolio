@@ -141,7 +141,7 @@ This document provides a breakdown of services rendered and payment details.
 }  */
 
 
-async function generatePdfClientSide() {
+/*async function generatePdfClientSide() {
   const element = docOutput;
 
   console.log('DOC OUTPUT innerHTML:', element.innerHTML);
@@ -157,9 +157,9 @@ async function generatePdfClientSide() {
 
   console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
-}
+}*/
 
-/*async function generatePdfClientSide() {
+async function generatePdfClientSide() {
   const element = docOutput;
 
   console.log('DOC OUTPUT innerHTML:', element.innerHTML);
@@ -171,7 +171,7 @@ async function generatePdfClientSide() {
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };  */
+  };
 
   console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
