@@ -159,6 +159,25 @@ async function generatePdfClientSide() {
   await html2pdf().set(opt).from(element).save();
 }
 
+/*async function generatePdfClientSide() {
+  const element = docOutput;
+
+  console.log('DOC OUTPUT innerHTML:', element.innerHTML);
+  console.log('DOC OUTPUT size:', element.offsetWidth, element.offsetHeight);
+
+  const opt = {
+    margin: 0.5,
+    filename: `document-${Date.now()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };  */
+
+  console.log("📄 Generating PDF from DOM element...");
+  await html2pdf().set(opt).from(element).save();
+}
+
+
 
 function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
@@ -243,7 +262,7 @@ if (error) {
 // ⬇️ Download PDF locally
 downloadBtn.addEventListener('click', async () => {
   try {
-    const pdfUrl = generateBasicPdf();                 //await generatePdfClientSide();
+    const pdfUrl = await generateBasicPdf();                 //await generatePdfClientSide();
     window.open(generatedPdfUrl, '_blank');
     /*const link = document.createElement('a');
     link.href = pdfUrl;
