@@ -107,7 +107,7 @@ This document provides a breakdown of services rendered and payment details.
 
 
 // 🧾 Shared function: Generate PDF from HTML if not already generated
-async function generatePdfIfNeeded() {
+/* async function generatePdfIfNeeded() {
   if (generatedPdfUrl) {
     console.log("♻️ Reusing cached PDF:", generatedPdfUrl);
     return generatedPdfUrl;
@@ -138,7 +138,7 @@ async function generatePdfIfNeeded() {
   console.log("✅ PDF generated and cached:", generatedPdfUrl);
   
   return generatedPdfUrl;
-} 
+} */
 
 
  async function generatePdfClientSide() {
@@ -264,7 +264,7 @@ if (error) {
 downloadBtn.addEventListener('click', async () => {
   try {
     const pdfUrl = await generateBasicPdf();       //await generatePdfClientSide();
-    window.open(generatedPdfUrl, '_blank');
+    //window.open(generatedPdfUrl, '_blank');
     /*const link = document.createElement('a');
     link.href = pdfUrl;
     link.download = `Document_${Date.now()}.pdf`;
