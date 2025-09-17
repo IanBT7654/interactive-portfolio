@@ -184,28 +184,27 @@ async function generateBasicPdf() {
   console.log('starting generateBasicPdf:');
 
   const testDiv = document.createElement('div');
-  testDiv.style.fontFamily = 'Arial, sans-serif';
-  testDiv.style.fontSize = '16px';
-  testDiv.style.padding = '20px';
-  testDiv.style.backgroundColor = '#fff';
-  testDiv.textContent = 'Hello, world!';
+  testDiv.innerHTML = `
+    <div style="padding: 20px; font-size: 16px; background: white; color: black;">
+      <h1>Hello world</h1>
+      <p>This is a minimal inline test PDF.</p>
+    </div>
+  `;
 
-  document.body.appendChild(testDiv);
+  document.body.appendChild(testDiv); // ← required to render for html2canvas
 
   const opt = {
     margin: 0.5,
-    filename: `hello-world-${Date.now()}.pdf`,
+    filename: `minimal-test-${Date.now()}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
 
-  console.log('📄 Generating minimal PDF...');
-
+  console.log("📄 Generating PDF from minimal inline div...");
   await html2pdf().set(opt).from(testDiv).save();
 
-  // Clean up after download
-  document.body.removeChild(testDiv);
+  document.body.removeChild(testDiv); // cleanup
   console.log('ending generateBasicPdf:');
 
 }
