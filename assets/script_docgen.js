@@ -81,22 +81,21 @@ async function generatePdfClientSide() {
   const element = document.getElementById('docOutput');
 
   if (!element || !element.innerHTML.trim()) {
-    console.error("❌ docOutput is empty. Aborting PDF generation.");
-    return alert("Document content is empty.");
+    alert("Document content is empty.");
+    return;
   }
 
-  console.log('🧾 Starting client-side PDF generation');
-  console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
+  // Small extra delay
+  await new Promise(resolve => setTimeout(resolve, 700)); 
 
   const opt = {
     margin: 0.5,
-    filename: `branded-document-${Date.now()}.pdf`,
+    filename: `document-${Date.now()}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
 
-  await new Promise(resolve => setTimeout(resolve, 300));
   await html2pdf().set(opt).from(element).save();
 }
 
