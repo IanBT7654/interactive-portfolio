@@ -1,3 +1,4 @@
+// script_docgen.js
 import { supabaseClient } from './config.js';
 
 // Debug toggle: true = use dummy data, false = call real AI function
