@@ -107,7 +107,7 @@ This document provides a breakdown of services rendered and payment details.
 
 
 // 🧾 Shared function: Generate PDF from HTML if not already generated
-/*async function generatePdfIfNeeded() {
+async function generatePdfIfNeeded() {
   if (generatedPdfUrl) {
     console.log("♻️ Reusing cached PDF:", generatedPdfUrl);
     return generatedPdfUrl;
@@ -138,10 +138,10 @@ This document provides a breakdown of services rendered and payment details.
   console.log("✅ PDF generated and cached:", generatedPdfUrl);
   
   return generatedPdfUrl;
-}  */
+} 
 
 
-/*async function generatePdfClientSide() {
+ async function generatePdfClientSide() {
   const element = docOutput;
 
   console.log('DOC OUTPUT innerHTML:', element.innerHTML);
@@ -157,24 +157,37 @@ This document provides a breakdown of services rendered and payment details.
 
   console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
-}*/
+} 
 
-async function generatePdfClientSide() {
-  const element = docOutput;
+async function generateBasicPdf() {
+  // Create a minimal test div with some basic formatted content
+  const testDiv = document.createElement('div');
+  testDiv.style.fontFamily = "'Roboto Mono', monospace";
+  testDiv.style.fontSize = '16px';
+  testDiv.style.color = '#000';
+  testDiv.style.backgroundColor = '#fff';
+  testDiv.style.padding = '20px';
+  testDiv.style.width = '500px';
+  testDiv.style.border = '1px solid #ccc';
+  testDiv.innerHTML = `
+    <h1 style="font-size: 24px; margin-bottom: 12px;">Test Document</h1>
+    <p>This is a <strong>basic</strong> PDF test.</p>
+    <p>Line 2 of the test document.</p>
+  `;
 
-  console.log('DOC OUTPUT innerHTML:', element.innerHTML);
-  console.log('DOC OUTPUT size:', element.offsetWidth, element.offsetHeight);
+  document.body.appendChild(testDiv);  // append so it's rendered (needed for html2canvas)
 
-  const opt = {
+  const options = {
     margin: 0.5,
-    filename: `document-${Date.now()}.pdf`,
+    filename: `basic-test-${Date.now()}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    jsPDF: { unit: 'in', format: 'letter' }
   };
 
-  console.log("📄 Generating PDF from DOM element...");
-  await html2pdf().set(opt).from(element).save();
+  await html2pdf().set(options).from(testDiv).save();
+
+  document.body.removeChild(testDiv);  // cleanup after generating PDF
 }
 
 
@@ -262,7 +275,7 @@ if (error) {
 // ⬇️ Download PDF locally
 downloadBtn.addEventListener('click', async () => {
   try {
-    const pdfUrl = await generateBasicPdf();                 //await generatePdfClientSide();
+    const pdfUrl = await generateBasicPdf();       //await generatePdfClientSide();
     window.open(generatedPdfUrl, '_blank');
     /*const link = document.createElement('a');
     link.href = pdfUrl;
