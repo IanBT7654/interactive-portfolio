@@ -143,7 +143,7 @@ send to fuction - not using this anymore because it can't do formatting
 } */
 
 
- async function generatePdfClientSide() {
+/* async function generatePdfClientSide() {
   const element = docOutput;
 
   console.log('DOC OUTPUT innerHTML:', element.innerHTML);
@@ -159,7 +159,32 @@ send to fuction - not using this anymore because it can't do formatting
 
   console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
-} 
+} */
+
+ async function generatePdfClientSide() {
+    const element = document.getElementById('docOutput');
+
+    if (!element || !element.innerHTML.trim()) {
+      console.error("❌ docOutput is empty. Aborting PDF generation.");
+      return alert("Document content is empty.");
+    }
+
+    console.log('🧾 Starting client-side PDF generation');
+    console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
+
+    const opt = {
+      margin:       0.5,
+      filename:     `branded-document-${Date.now()}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Optional: Wait a short moment to let DOM styles apply
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    await html2pdf().set(opt).from(element).save();
+  }
 
 /* async function generateBasicPdf() {
   // Create a minimal test div with some basic formatted content
@@ -296,14 +321,9 @@ if (error) {
 // ⬇️ Download PDF locally
 downloadBtn.addEventListener('click', async () => {
   try {
-    const pdfUrl = await generateBasicPdf();       //await generatePdfClientSide();
-    //window.open(generatedPdfUrl, '_blank');
-    /*const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = `Document_${Date.now()}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link); */
+    console.log("🧾 Download button clicked");
+    const pdfUrl = await generatePdfClientSide();       //await generateBasicPdf();  
+
   } catch (err) {
     console.error('Download error:', err);
     alert(err.message || 'Failed to download PDF.');
