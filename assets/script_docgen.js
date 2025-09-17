@@ -160,7 +160,7 @@ send to fuction - not using this anymore because it can't do formatting
   await html2pdf().set(opt).from(element).save();
 } 
 
-async function generateBasicPdf() {
+/* async function generateBasicPdf() {
   // Create a minimal test div with some basic formatted content
 const element = docOutput;
 
@@ -177,7 +177,39 @@ const element = docOutput;
 
   console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
+}  */
+
+async function generateBasicPdf() {
+  // Create a minimal test div dynamically (not relying on docOutput)
+  console.log('starting generateBasicPdf:');
+
+  const testDiv = document.createElement('div');
+  testDiv.style.fontFamily = 'Arial, sans-serif';
+  testDiv.style.fontSize = '16px';
+  testDiv.style.padding = '20px';
+  testDiv.style.backgroundColor = '#fff';
+  testDiv.textContent = 'Hello, world!';
+
+  document.body.appendChild(testDiv);
+
+  const opt = {
+    margin: 0.5,
+    filename: `hello-world-${Date.now()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  console.log('📄 Generating minimal PDF...');
+
+  await html2pdf().set(opt).from(testDiv).save();
+
+  // Clean up after download
+  document.body.removeChild(testDiv);
+  console.log('ending generateBasicPdf:');
+
 }
+
 
 
 
