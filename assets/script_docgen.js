@@ -329,4 +329,31 @@ function trackEmailStatus(message_id) {
   }, 4000);
 }
 
+// ✅ WORKING STANDALONE PDF GENERATOR
+document.getElementById('testPdfBtn')?.addEventListener('click', async () => {
+  console.log("✅ Test PDF Button clicked");
+
+  const testDiv = document.createElement('div');
+  testDiv.innerHTML = `
+    <div style="padding: 20px; font-size: 16px; background: white; color: black;">
+      <h1>Hello world</h1>
+      <p>This is a minimal inline test PDF.</p>
+    </div>
+  `;
+
+  document.body.appendChild(testDiv); // Must be in DOM for html2canvas to work
+
+  const opt = {
+    margin: 0.5,
+    filename: `working-test-${Date.now()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  console.log("📄 Generating PDF...");
+  await html2pdf().set(opt).from(testDiv).save();
+  document.body.removeChild(testDiv);
+  console.log("✅ PDF generated and downloaded");
+});
 
