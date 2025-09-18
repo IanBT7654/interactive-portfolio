@@ -2,7 +2,7 @@
 import { supabaseClient } from './config.js';
 
 // Debug toggle: true = use dummy data, false = call real AI function
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 // DOM elements
 const form = document.getElementById('docForm');
@@ -60,13 +60,35 @@ form.addEventListener('submit', async (e) => {
 
   // Show preview
   previewSection.classList.remove('hidden');
-
-  // ✅ Also show test PDF button section
-document.getElementById('testPdfSection')?.classList.remove('hidden');
 });
 
 // 🧠 Generate text from AI (Supabase Edge Function)
 async function generateDocumentWithAI(prompt) {
+  if (USE_DUMMY_DATA) {
+    console.log('⚠️ Using dummy data');
+    return `
+# Monthly Report
+
+**Client:** ACME Corporation  
+**Date:** September 2025
+
+## Summary
+
+This document provides a breakdown of services rendered and payment details.
+
+### Services Rendered
+- AI Document Generation
+- Email Tracking Integration
+- PDF Export Setup
+
+**Total Amount:** $2000
+
+---
+
+*Prompt used:* "${prompt}"
+`;
+  }
+
   try {
     const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
       body: { prompt }
@@ -121,47 +143,48 @@ send to fuction - not using this anymore because it can't do formatting
 } */
 
 
-async function generatePdfClientSide() {
-  const element = document.getElementById('docOutput');
+/* async function generatePdfClientSide() {
+  const element = docOutput;
 
-  if (!element || !element.innerHTML.trim()) {
-    console.error("❌ docOutput is empty. Aborting PDF generation.");
-    return alert("Document content is empty.");
-  }
-
-  // 🕒 Wait until the element is visible and has layout (up to 5 seconds)
-  const waitUntilVisible = async (maxWaitMs = 5000, checkInterval = 300) => {
-    const start = Date.now();
-    while (Date.now() - start < maxWaitMs) {
-      const bounds = element.getBoundingClientRect();
-      if (bounds.width > 0 && bounds.height > 0) {
-        console.log('✅ Document is visible and has layout:', bounds.width, 'x', bounds.height);
-        return true;
-      }
-      console.log('⏳ Waiting for document to render...');
-      await new Promise(res => setTimeout(res, checkInterval));
-    }
-    return false;
-  };
-
-  const isReady = await waitUntilVisible();
-  if (!isReady) {
-    console.error('❌ Document never became visible. Cannot generate PDF.');
-    return alert('Document is not visible or fully rendered. Please try again.');
-  }
-
-  console.log('🧾 Starting client-side PDF generation');
+  console.log('DOC OUTPUT innerHTML:', element.innerHTML);
+  console.log('DOC OUTPUT size:', element.offsetWidth, element.offsetHeight);
 
   const opt = {
-    margin: 0.5,
-    filename: `branded-document-${Date.now()}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    margin:       0,
+    filename:     `document-${Date.now()}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
 
+  console.log("📄 Generating PDF from DOM element...");
   await html2pdf().set(opt).from(element).save();
-}
+} */
+
+ async function generatePdfClientSide() {
+    const element = document.getElementById('docOutput');
+
+    if (!element || !element.innerHTML.trim()) {
+      console.error("❌ docOutput is empty. Aborting PDF generation.");
+      return alert("Document content is empty.");
+    }
+
+    console.log('🧾 Starting client-side PDF generation');
+    console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
+
+    const opt = {
+      margin:       0.5,
+      filename:     `branded-document-${Date.now()}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Optional: Wait a short moment to let DOM styles apply
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    await html2pdf().set(opt).from(element).save();
+  }
 
 /* async function generateBasicPdf() {
   // Create a minimal test div with some basic formatted content
@@ -330,32 +353,3 @@ function trackEmailStatus(message_id) {
     }
   }, 4000);
 }
-
-// ✅ WORKING STANDALONE PDF GENERATOR
-document.getElementById('testPdfBtn')?.addEventListener('click', async () => {
-  console.log("✅ Test PDF Button clicked");
-
-  const testDiv = document.createElement('div');
-  testDiv.innerHTML = `
-    <div style="padding: 20px; font-size: 16px; background: white; color: black;">
-      <h1>Hello world</h1>
-      <p>This is a minimal inline test PDF.</p>
-    </div>
-  `;
-
-  document.body.appendChild(testDiv); // Must be in DOM for html2canvas to work
-
-  const opt = {
-    margin: 0.5,
-    filename: `working-test-${Date.now()}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-  };
-
-  console.log("📄 Generating PDF...");
-  await html2pdf().set(opt).from(testDiv).save();
-  document.body.removeChild(testDiv);
-  console.log("✅ PDF generated and downloaded");
-});
-
