@@ -1,6 +1,5 @@
 C:\Users\HP\interactive-portfolio\document_generator.html
 C:\Users\HP\interactive-portfolio\files.txt
-C:\Users\HP\interactive-portfolio\minimal.html
 C:\Users\HP\interactive-portfolio\minimal2 - Copy.html
 C:\Users\HP\interactive-portfolio\minimal2.html
 C:\Users\HP\interactive-portfolio\assets\script_docgen.js
