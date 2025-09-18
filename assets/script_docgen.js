@@ -121,48 +121,47 @@ send to fuction - not using this anymore because it can't do formatting
 } */
 
 
-/* async function generatePdfClientSide() {
-  const element = docOutput;
+async function generatePdfClientSide() {
+  const element = document.getElementById('docOutput');
 
-  console.log('DOC OUTPUT innerHTML:', element.innerHTML);
-  console.log('DOC OUTPUT size:', element.offsetWidth, element.offsetHeight);
+  if (!element || !element.innerHTML.trim()) {
+    console.error("❌ docOutput is empty. Aborting PDF generation.");
+    return alert("Document content is empty.");
+  }
 
-  const opt = {
-    margin:       0,
-    filename:     `document-${Date.now()}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  // 🕒 Wait until the element is visible and has layout (up to 5 seconds)
+  const waitUntilVisible = async (maxWaitMs = 5000, checkInterval = 300) => {
+    const start = Date.now();
+    while (Date.now() - start < maxWaitMs) {
+      const bounds = element.getBoundingClientRect();
+      if (bounds.width > 0 && bounds.height > 0) {
+        console.log('✅ Document is visible and has layout:', bounds.width, 'x', bounds.height);
+        return true;
+      }
+      console.log('⏳ Waiting for document to render...');
+      await new Promise(res => setTimeout(res, checkInterval));
+    }
+    return false;
   };
 
-  console.log("📄 Generating PDF from DOM element...");
-  await html2pdf().set(opt).from(element).save();
-} */
-
- async function generatePdfClientSide() {
-    const element = document.getElementById('docOutput');
-
-    if (!element || !element.innerHTML.trim()) {
-      console.error("❌ docOutput is empty. Aborting PDF generation.");
-      return alert("Document content is empty.");
-    }
-
-    console.log('🧾 Starting client-side PDF generation');
-    console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
-
-    const opt = {
-      margin:       0.5,
-      filename:     `branded-document-${Date.now()}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    // Optional: Wait a short moment to let DOM styles apply
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    await html2pdf().set(opt).from(element).save();
+  const isReady = await waitUntilVisible();
+  if (!isReady) {
+    console.error('❌ Document never became visible. Cannot generate PDF.');
+    return alert('Document is not visible or fully rendered. Please try again.');
   }
+
+  console.log('🧾 Starting client-side PDF generation');
+
+  const opt = {
+    margin: 0.5,
+    filename: `branded-document-${Date.now()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  await html2pdf().set(opt).from(element).save();
+}
 
 /* async function generateBasicPdf() {
   // Create a minimal test div with some basic formatted content
