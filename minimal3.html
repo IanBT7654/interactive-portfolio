@@ -61,9 +61,7 @@
 </div>
 
       <div class="mt-6 flex gap-4">
-        <button id="downloadBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
-          ⬇️ Download PDF
-        </button>
+
         <button id="sendEmailBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
           📤 Send via Email
         </button>
@@ -80,7 +78,18 @@
       </div>
     </section>
  
+ <p>Minimal PDF Generator</p>
 
+  <form id="docFormMini">
+    <input type="text" id="docPrompt" placeholder="Enter prompt" required />
+    <input type="email" id="recipientEmail" placeholder="Enter email" required />
+    <button type="submit">Generate Document</button>
+  </form>
+
+  <div id="previewSection" class="hidden">
+    <div id="docOutput"></div>
+    <button id="downloadBtn">⬇️ Download PDF</button>
+  </div>
 
   </main>
 
@@ -92,5 +101,4 @@
   <script type="module" src="assets/config.js"></script>
   <script type="module" src="assets/mini3.js"></script>
 </body>
-</html> 444
-
+</html> 555
