@@ -377,12 +377,12 @@ if (miniForm) {
 
   miniDownloadBtn.addEventListener('click', async () => {
     console.log("🧾 [Mini] Download button clicked");
-    await generatePdfClientSide(miniOutput);
+    await generatePdfClientSideMini(miniOutput);
   });
 }
 
 // GENERIC PDF FUNCTION (accepts element)
-async function generatePdfClientSide(element = docOutput) {
+async function generatePdfClientSideMini(element = docOutput) {
   if (!element || !element.innerHTML.trim()) {
     console.error("❌ docOutput is empty. Aborting PDF generation.");
     return alert("Document content is empty.");
