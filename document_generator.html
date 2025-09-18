@@ -1,34 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Generate Document</title>
+  <title>AI Document Generator + Email Tracker</title>
 
-  <!-- External CSS -->
-  <link rel="stylesheet" href="assets/styles.css" />
-
-  <!-- html2pdf library -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link rel="stylesheet" href="assets/styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet" />
+<style>
+  .font-mono {
+    font-family: 'Roboto Mono', monospace;
+  }
+</style>
+
 </head>
-<body>
+<body class="bg-gray-100 font-sans leading-relaxed tracking-wide text-gray-800 min-h-screen flex flex-col">
 
-  <h1>📄 AI Document Generator</h1>
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow">
+    <h1 class="text-3xl font-bold">🧠 AI Document Generator + 📬 Email Tracker</h1>
+    <p class="text-sm mt-1">Create a document → Email it → Watch it arrive live</p>
+  </header>
 
-  <form id="docForm">
-    <input type="text" id="docPrompt" placeholder="Enter a topic or prompt" required />
-    <input type="email" id="recipientEmail" placeholder="Enter your email" required />
-    <button type="submit">Generate Document</button>
-  </form>
+  <main class="flex-grow max-w-4xl mx-auto mt-10 px-4 space-y-10">
 
-  <div id="previewSection" class="hidden">
-    <div id="docOutput"></div>
-    <button id="downloadBtn">⬇️ Download PDF</button>
-  </div>
+    <!-- Form Input -->
+    <section class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">1️⃣ Describe the Document</h2>
+      <form id="docForm" class="space-y-4">
+        <input type="text" id="docPrompt" placeholder="e.g., Invoice for ACME Corp for Sept, $2000"
+          class="w-full border px-4 py-2 rounded text-sm" required />
 
-  <!-- External JS -->
-  <script src="assets/script_docgen.js"></script>
+        <input type="email" id="recipientEmail" placeholder="Enter your email to receive the doc"
+          class="w-full border px-4 py-2 rounded text-sm" required />
 
+        <button type="submit"
+          class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 text-sm font-medium">
+          ✨ Generate Document
+        </button>
+      </form>
+    </section>
+
+    <!-- Document Preview + Actions -->
+    <section id="previewSection" class="bg-white rounded-lg shadow p-6 hidden">
+      <h2 class="text-xl font-semibold mb-4">2️⃣ Document Preview</h2>
+
+      <!--<div id="docOutput" class="border rounded p-4 bg-gray-50 text-sm leading-relaxed font-mono whitespace-pre-wrap"></div> -->
+<div id="docOutput" style="
+  background: white;
+  color: black;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 20px;
+  white-space: pre-wrap;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+">
+</div>
+
+      <div class="mt-6 flex gap-4">
+        <button id="downloadBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm">
+          ⬇️ Download PDF
+        </button>
+        <button id="sendEmailBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+          📤 Send via Email
+        </button>
+      </div>
+    </section>
+
+    <!-- Email Tracking Status -->
+    <section id="statusSection" class="bg-white rounded-lg shadow p-6 hidden">
+      <h2 class="text-xl font-semibold mb-4">3️⃣ Email Status</h2>
+      <div class="space-y-2 text-sm font-mono">
+        <div id="status-sent">📤 Sent: ...</div>
+        <div id="status-delivered">📬 Delivered: ...</div>
+        <div id="status-opened">📖 Opened: ...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center text-xs text-gray-500 mt-12 mb-6">
+    &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
+  </footer>
+
+  <!-- JS Modules -->
+  <script type="module" src="assets/config.js"></script>
+  <script type="module" src="assets/script_docgen.js"></script>
 </body>
-</html>
-222
+</html> 111
