@@ -60,6 +60,9 @@ form.addEventListener('submit', async (e) => {
 
   // Show preview
   previewSection.classList.remove('hidden');
+
+  // ✅ Also show test PDF button section
+document.getElementById('testPdfSection')?.classList.remove('hidden');
 });
 
 // 🧠 Generate text from AI (Supabase Edge Function)
