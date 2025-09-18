@@ -64,31 +64,6 @@ form.addEventListener('submit', async (e) => {
 
 // 🧠 Generate text from AI (Supabase Edge Function)
 async function generateDocumentWithAI(prompt) {
-  if (USE_DUMMY_DATA) {
-    console.log('⚠️ Using dummy data');
-    return `
-# Monthly Report
-
-**Client:** ACME Corporation  
-**Date:** September 2025
-
-## Summary
-
-This document provides a breakdown of services rendered and payment details.
-
-### Services Rendered
-- AI Document Generation
-- Email Tracking Integration
-- PDF Export Setup
-
-**Total Amount:** $2000
-
----
-
-*Prompt used:* "${prompt}"
-`;
-  }
-
   try {
     const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
       body: { prompt }
