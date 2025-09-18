@@ -268,5 +268,7 @@ async function generatePdfClientSide_mini(element = miniOutput_mini) {
   };
 
   await new Promise(resolve => setTimeout(resolve, 300));
+  console.log("[Mini] Content innerHTML snapshot:", element.innerHTML.slice(0, 300));
+console.log("[Mini] Content textContent snapshot:", element.textContent.slice(0, 300));
   await html2pdf().set(opt).from(element).save();
 }
