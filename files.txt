@@ -1,6 +1,5 @@
 C:\Users\HP\interactive-portfolio\document_generator.html
 C:\Users\HP\interactive-portfolio\files.txt
-C:\Users\HP\interactive-portfolio\minimal2.html
 C:\Users\HP\interactive-portfolio\minimal3.html
 C:\Users\HP\interactive-portfolio\assets\mini2.js
 C:\Users\HP\interactive-portfolio\assets\mini3.js
