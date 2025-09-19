@@ -72,7 +72,7 @@ function renderBrandedPDFDocument(aiText = '') {
 
   return finalHtml;
 }
-
+});
 
  async function generatePdfClientSide() {
     const element = document.getElementById('docOutput');
