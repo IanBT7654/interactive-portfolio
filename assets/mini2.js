@@ -32,7 +32,57 @@ form.addEventListener('submit', async (e) => {
   }
 
   // Convert to branded HTML
-function renderBrandedPDFDocument(aiText = '') {
+  const brandedHtml = renderBrandedPDFDocument(generatedText);
+  console.log('⚠️ [004] Generated branded HTML length:', brandedHtml.length);
+
+  // Insert into DOM
+  docOutput.innerHTML = brandedHtml;
+
+  // Force DOM reflow (in case html2pdf renders before styles apply)
+  docOutput.offsetHeight;
+
+  // Reveal preview section
+  previewSection.classList.remove('hidden');
+  console.log('⚠️ [005] Preview section shown');
+
+  // Log current docOutput innerHTML
+  console.log('⚠️ [006] docOutput.innerHTML:', docOutput.innerHTML.slice(0, 300) + '...');
+});
+
+
+ async function generatePdfClientSide() {
+    const element = document.getElementById('docOutput');
+
+    if (!element || !element.innerHTML.trim()) {
+      console.error("❌ docOutput is empty. Aborting PDF generation.");
+      return alert("Document content is empty.");
+    }
+
+    console.log('🧾 Starting client-side PDF generation');
+    console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
+
+    const opt = {
+      margin:       0.5,
+      filename:     `branded-document-${Date.now()}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Optional: Wait a short moment to let DOM styles apply
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    await html2pdf().set(opt).from(element).save();
+  }
+
+  downloadBtn.addEventListener('click', async () => {
+  console.log("🧾 Download button clicked");
+  await generatePdfClientSide();
+});
+    
+
+
+  function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
 
   // Basic Markdown to HTML converter with better paragraph splitting
@@ -72,75 +122,7 @@ function renderBrandedPDFDocument(aiText = '') {
 
   return finalHtml;
 }
-});
 
- async function generatePdfClientSide() {
-    const element = document.getElementById('docOutput');
-
-    if (!element || !element.innerHTML.trim()) {
-      console.error("❌ docOutput is empty. Aborting PDF generation.");
-      return alert("Document content is empty.");
-    }
-
-    console.log('🧾 Starting client-side PDF generation');
-    console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
-
-    const opt = {
-      margin:       0.5,
-      filename:     `branded-document-${Date.now()}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    // Optional: Wait a short moment to let DOM styles apply
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    await html2pdf().set(opt).from(element).save();
-  }
-
-  downloadBtn.addEventListener('click', async () => {
-  console.log("🧾 Download button clicked");
-  await generatePdfClientSide();
-});
-    function renderBrandedPDFDocument(aiText = '') {
-  const title = 'Automate-AIG Generated Document';
-
-  // Basic Markdown to HTML converter
-  const htmlFormattedContent = aiText
-    .replace(/^### (.*$)/gim, '<h3 style="font-size: 18px; margin-bottom: 8px;">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 style="font-size: 20px; margin-bottom: 10px;">$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1 style="font-size: 22px; margin-bottom: 12px;">$1</h1>')
-    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    .replace(/^- (.*$)/gim, '<li>$1</li>')
-    .replace(/\n{2,}/g, '</p><p>') // Paragraph breaks
-    .replace(/\n/g, '<br>');
-
-  const finalHtml = `
-    <div style="font-family: 'Roboto Mono', monospace; font-size: 14px; color: #000; background: white; border: 1px solid #ccc; border-radius: 8px; overflow: visible; box-shadow: 0 0 10px rgba(0,0,0,0.05); width: 100%; max-width: 750px; margin: auto;">
-    
-      <!-- HEADER -->
-      <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 24px 32px;">
-        <h1 style="margin: 0; font-size: 24px;">${title}</h1>
-        <p style="margin-top: 4px; font-size: 14px;">Generated using AI on ${new Date().toLocaleDateString()}</p>
-      </div>
-
-      <!-- BODY -->
-      <div style="padding: 32px;">
-        <p>${htmlFormattedContent}</p>
-      </div>
-
-      <!-- FOOTER -->
-      <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 16px 32px; text-align: center; border-top: 1px solid #ccc;">
-        &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
-      </div>
-
-    </div>
-  `;
-
-  return finalHtml;
-}
 
 
 
