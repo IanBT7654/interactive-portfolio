@@ -32,22 +32,46 @@ form.addEventListener('submit', async (e) => {
   }
 
   // Convert to branded HTML
-  const brandedHtml = renderBrandedPDFDocument(generatedText);
-  console.log('⚠️ [004] Generated branded HTML length:', brandedHtml.length);
+function renderBrandedPDFDocument(aiText = '') {
+  const title = 'Automate-AIG Generated Document';
 
-  // Insert into DOM
-  docOutput.innerHTML = brandedHtml;
+  // Basic Markdown to HTML converter with better paragraph splitting
+  const htmlFormattedContent = aiText
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    .replace(/\n{2,}/g, '\n\n') // preserve paragraph breaks
+    .split(/\n{2,}/g) // split into paragraphs
+    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
 
-  // Force DOM reflow (in case html2pdf renders before styles apply)
-  docOutput.offsetHeight;
+  const finalHtml = `
+    <div style="font-family: 'Arial', sans-serif; font-size: 14px; color: #000; background: white; border: 1px solid #ccc; border-radius: 8px; width: 100%; max-width: 750px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
 
-  // Reveal preview section
-  previewSection.classList.remove('hidden');
-  console.log('⚠️ [005] Preview section shown');
+      <!-- HEADER -->
+      <div style="background: linear-gradient(to right, #2563eb, #4f46e5); color: white; padding: 20px 28px;">
+        <h1 style="margin: 0; font-size: 22px;">${title}</h1>
+        <p style="margin-top: 4px; font-size: 13px;">Generated on ${new Date().toLocaleDateString()}</p>
+      </div>
 
-  // Log current docOutput innerHTML
-  console.log('⚠️ [006] docOutput.innerHTML:', docOutput.innerHTML.slice(0, 300) + '...');
-});
+      <!-- BODY -->
+      <div style="padding: 20px 28px; page-break-inside: auto; page-break-after: auto; page-break-before: auto;">
+        ${htmlFormattedContent}
+      </div>
+
+      <!-- FOOTER -->
+      <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 12px 28px; text-align: center; border-top: 1px solid #ccc;">
+        &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
+      </div>
+
+    </div>
+  `;
+
+  return finalHtml;
+}
 
 
  async function generatePdfClientSide() {
