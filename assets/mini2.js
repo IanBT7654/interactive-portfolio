@@ -1,11 +1,13 @@
-    const USE_DUMMY_DATA = true;
+import { supabaseClient } from './config.js'; // Adjust path if needed
 
-    const form = document.getElementById('docForm');
-    const docPrompt = document.getElementById('docPrompt');
-    const recipientEmail = document.getElementById('recipientEmail');
-    const docOutput = document.getElementById('docOutput');
-    const previewSection = document.getElementById('previewSection');
-    const downloadBtn = document.getElementById('downloadBtn');
+const USE_DUMMY_DATA = false;
+
+const form = document.getElementById('docForm');
+const docPrompt = document.getElementById('docPrompt');
+const recipientEmail = document.getElementById('recipientEmail');
+const docOutput = document.getElementById('docOutput');
+const previewSection = document.getElementById('previewSection');
+const downloadBtn = document.getElementById('downloadBtn');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -24,33 +26,43 @@ form.addEventListener('submit', async (e) => {
     console.log('⚠️ [002] Using dummy data');
     generatedText = `Dummy generated document content.\nSecond line of dummy content.\nPrompt was: "${promptText}"`;
   } else {
-    console.log('⚠️ [003] Attempting to call generateDocumentWithAI (not expected in minimal)');
+    console.log('⚠️ [003] Calling Supabase Edge Function...');
     generatedText = await generateDocumentWithAI(promptText);
     if (!generatedText) {
       return alert('AI failed to generate document.');
     }
   }
 
-  // Convert to branded HTML
   const brandedHtml = renderBrandedPDFDocument(generatedText);
   console.log('⚠️ [004] Generated branded HTML length:', brandedHtml.length);
 
-  // Insert into DOM
   docOutput.innerHTML = brandedHtml;
-
-  // Force DOM reflow (in case html2pdf renders before styles apply)
-  docOutput.offsetHeight;
-
-  // Reveal preview section
+  docOutput.offsetHeight; // force reflow
   previewSection.classList.remove('hidden');
-  console.log('⚠️ [005] Preview section shown');
 
-  // Log current docOutput innerHTML
+  console.log('⚠️ [005] Preview section shown');
   console.log('⚠️ [006] docOutput.innerHTML:', docOutput.innerHTML.slice(0, 300) + '...');
 });
 
+async function generateDocumentWithAI(prompt) {
+  try {
+    const { data, error } = await supabaseClient.functions.invoke('generate_doc', {
+      body: { prompt }
+    });
 
- async function generatePdfClientSide() {
+    if (error) {
+      console.error('❌ Function Error:', error);
+      throw new Error(error.message || 'AI generation failed');
+    }
+
+    return data.result;
+  } catch (err) {
+    console.error('❌ AI generation error:', err);
+    return null;
+  }
+}
+
+async function generatePdfClientSide() {
   const element = document.getElementById('docOutput');
 
   if (!element || !element.innerHTML.trim()) {
@@ -62,10 +74,10 @@ form.addEventListener('submit', async (e) => {
   console.log('📦 Content size:', element.offsetWidth, 'x', element.offsetHeight);
 
   const opt = {
-    margin:       0.5,
-    filename:     `branded-document-${Date.now()}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  {
+    margin: 0.5,
+    filename: `branded-document-${Date.now()}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
       scale: 2,
       scrollY: 0,
       useCORS: true
@@ -81,15 +93,12 @@ form.addEventListener('submit', async (e) => {
   await html2pdf().set(opt).from(element).save();
 }
 
-
-  downloadBtn.addEventListener('click', async () => {
+downloadBtn.addEventListener('click', async () => {
   console.log("🧾 Download button clicked");
   await generatePdfClientSide();
 });
-    
 
-
-  function renderBrandedPDFDocument(aiText = '') {
+function renderBrandedPDFDocument(aiText = '') {
   const title = 'Automate-AIG Generated Document';
 
   const htmlFormattedContent = aiText
@@ -104,7 +113,6 @@ form.addEventListener('submit', async (e) => {
     .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
     .join('');
 
-  // NOTE: no outer div with borders/padding
   const finalHtml = `
     <div style="font-family: 'Arial', sans-serif; font-size: 14px; color: #000; padding: 20px;">
       <!-- HEADER -->
@@ -127,21 +135,3 @@ form.addEventListener('submit', async (e) => {
 
   return finalHtml;
 }
-
-
-
-
-
-    async function generateBasicPdf() {
-      const element = docOutput;
-
-      const opt = {
-        margin: 0.5,
-        filename: `test-document-${Date.now()}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      await html2pdf().set(opt).from(element).save();
-    }
