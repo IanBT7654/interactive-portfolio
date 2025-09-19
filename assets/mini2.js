@@ -114,7 +114,7 @@ form.addEventListener('submit', async (e) => {
 
       <!-- FOOTER -->
       <div style="background-color: #f5f8ff; color: #555; font-size: 12px; padding: 12px 28px; text-align: center; border-top: 1px solid #ccc;">
-        &copy; 2025 Ian B | Built with GitHub, Supabase, Resend, and html2pdf.js
+        &copy; 2025 Ian C | Built with GitHub, Supabase, Resend, and html2pdf.js
       </div>
 
     </div>
