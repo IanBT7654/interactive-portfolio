@@ -331,15 +331,3 @@ function trackEmailStatus(message_id) {
   }, 4000);
 }
 
-window.resetAll = function() {
-  const iframe = document.querySelector('iframe[src*="minimal2.html"]');
-
-  if (iframe) {
-    const baseSrc = iframe.src.split('?')[0];
-    iframe.src = baseSrc + '?t=' + new Date().getTime();
-  }
-
-  setTimeout(() => {
-    window.location.href = window.location.pathname + '?t=' + new Date().getTime();
-  }, 220);
-};
