@@ -341,5 +341,5 @@ window.resetAll = function() {
 
   setTimeout(() => {
     window.location.href = window.location.pathname + '?t=' + new Date().getTime();
-  }, 200);
+  }, 220);
 };
