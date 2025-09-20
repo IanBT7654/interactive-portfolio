@@ -1,6 +1,6 @@
 import { supabaseClient } from './config.js'; // Adjust path if needed
 
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 const form = document.getElementById('docForm');
 const docPrompt = document.getElementById('docPrompt');
