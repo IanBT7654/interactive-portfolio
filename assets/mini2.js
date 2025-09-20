@@ -39,6 +39,8 @@ form.addEventListener('submit', async (e) => {
   docOutput.innerHTML = brandedHtml;
   docOutput.offsetHeight; // force reflow
   previewSection.classList.remove('hidden');
+  // ⬇️ Scroll to download button smoothly
+  downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   console.log('⚠️ [005] Preview section shown');
   console.log('⚠️ [006] docOutput.innerHTML:', docOutput.innerHTML.slice(0, 300) + '...');
