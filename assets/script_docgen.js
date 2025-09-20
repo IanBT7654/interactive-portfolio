@@ -330,3 +330,18 @@ function trackEmailStatus(message_id) {
     }
   }, 4000);
 }
+
+function resetAll() {
+    const iframe = document.querySelector('iframe[src*="minimal2.html"]');
+
+    // Reload the iframe with a cache-busting query string
+    if (iframe) {
+      const baseSrc = iframe.src.split('?')[0];
+      iframe.src = baseSrc + '?t=' + new Date().getTime(); // Add timestamp
+    }
+
+    // Reload the main page (index.html) after a short delay to allow iframe reset
+    setTimeout(() => {
+      window.location.href = window.location.pathname + '?t=' + new Date().getTime();
+    }, 200); // optional delay to ensure iframe gets reloaded
+  }
