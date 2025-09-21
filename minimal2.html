@@ -1,55 +1,65 @@
+<!-- minimal2.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Minimal PDF Test</title>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <title>AI Doc Generator</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      padding: 2rem;
-      background: #f0f0f0;
+      font-family: sans-serif;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
     }
-    #docOutput {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  border: none;
-  background: white;
-  color: black;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+    }
     .hidden {
       display: none;
     }
-    button {
-      margin-top: 1rem;
-      padding: 10px 20px;
-      font-size: 14px;
+    #emailPair {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    #recipientEmail {
+      flex: 1;
+      padding: 8px;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
 
-  <h1>Minimal PDF Generator</h1>
-
   <form id="docForm">
-    <input type="text" id="docPrompt" placeholder="Enter prompt" required />
-    <input type="email" id="recipientEmail" placeholder="Enter email" required />
-    <button type="submit">Generate Document</button>
+    <h2>Enter prompt</h2>
+    <textarea id="docPrompt" placeholder="Describe the document to generate..."></textarea>
+    <button type="submit">Generate</button>
   </form>
 
-  <div id="previewSection" class="hidden">
-    <div id="docOutput"></div>
-    <button id="downloadBtn">⬇️ Download PDF</button>
-  </div>
+  <section id="previewSection" class="hidden">
+    <div id="docOutput" style="margin: 20px 0;"></div>
+    <button id="downloadBtn">Download PDF</button>
 
- <script type="module" src="assets/mini2.js"></script>
+    <div id="emailPair" style="opacity: 0.5; pointer-events: none;">
+      <input type="email" id="recipientEmail" placeholder="Enter email to send to" />
+      <button id="sendEmailBtn">Send Email</button>
+    </div>
+
+    <div id="statusSection" class="hidden">
+      <p>📬 Email sent. Tracking initiated...</p>
+    </div>
+  </section>
+
+  <script type="module" src="./mini2.js"></script>
 </body>
 </html>
-444
+000
