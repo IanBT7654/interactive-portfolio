@@ -21,6 +21,12 @@ const submitBlogBtn = document.getElementById('submitBlogBtn');
 const blogPreview = document.getElementById('blogPostPreview');
 const uploadDropZone = document.getElementById('uploadDropZone');
 
+  const parentSpinner = document.getElementById('parentSpinner');
+  const envelope = document.getElementById('envelope');
+  const emailDeliveredBtn = document.getElementById('emailDeliveredBtn');
+  const activityInfoText = document.getElementById('activityInfoText');
+  const resetBtn = document.getElementById('resetBtn');
+
 let cropper = null;
 let originalFileName = '';
 
@@ -278,16 +284,41 @@ window.resetAll = function() {
   }
 });*/
 
-function showParentSpinner() {
-  const spinner = document.getElementById('parentSpinner');
-  if (spinner) spinner.style.display = 'block';
-}
+// Show spinner & start animation
+  function showParentSpinner() {
+    emailDeliveredBtn.style.display = 'none';
+    activityInfoText.style.opacity = 0;
+    parentSpinner.style.display = 'block';
+    
+    // Restart animation
+    envelope.style.animation = 'none';
+    envelope.offsetHeight; // trigger reflow
+    envelope.style.animation = 'slideAcross 3s linear forwards';
+  }
 
-function hideParentSpinner() {
+// Hide spinner and show post-animation controls
+  function hideParentSpinner() {          //was called onAnimationEnd - worng name
+    parentSpinner.style.display = 'none';
+    emailDeliveredBtn.style.display = 'inline-block';
+    activityInfoText.style.opacity = 1;
+  }
+
+  // Listen for envelope animation end event
+  envelope.addEventListener('animationend', onAnimationEnd);
+
+/* function hideParentSpinner() {
   const spinner = document.getElementById('parentSpinner');
   if (spinner) spinner.style.display = 'none';
-}
-
+} */
+  // Reset button click handler
+  resetBtn.addEventListener('click', () => {
+    emailDeliveredBtn.style.display = 'none';
+    activityInfoText.style.opacity = 0;
+    showParentSpinner();
+    
+    // Optionally: reset your iframe or interactive content here
+    window.resetAll && window.resetAll();
+  });
 
 window.addEventListener('message', (event) => {
   if (!event.data || !event.data.action) return;

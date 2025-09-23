@@ -15,7 +15,7 @@
 
   <!-- Header -->
   <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow">
-    <h1 class="text-3xl font-bold">automate-aig  mmmmmmmmmmm333</h1>
+    <h1 class="text-3xl font-bold">automate-aig  mmmmmmmmmmm444</h1>
     <p class="text-sm mt-1">Automation + AIG — Interactive demo tools by Ian B</p>
     <p class="text-sm mt-1">Email: IanB@clemssecurity.com.au</p>
   </header>
@@ -179,46 +179,68 @@
   </iframe>
 </section>
 
-<div id="parentSpinner" style="display:none; overflow:hidden; width: 100%; height: 50px; margin: 1rem 0; position: relative;">
-  <svg
-    id="envelope"
-    xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
-    viewBox="0 0 64 64"
-    fill="#2563eb"
-    style="position: absolute; top: 5px; left: 0;"
-  >
-    <rect x="2" y="16" width="60" height="32" rx="4" ry="4" stroke="#2563eb" stroke-width="3" fill="none"/>
-    <polyline points="2,16 32,36 62,16" stroke="#2563eb" stroke-width="3" fill="none"/>
-  </svg>
+<!-- Container wrapping your embed + controls -->
+<div id="embedWrapper" style="position: relative; max-width: 700px; margin: auto;">
+  
+  <!-- Your embedded container -->
+  <div id="embedContainer" style="border: 1px solid #ccc; padding: 1rem; height: 300px; position: relative;">
+    <!-- Your embedded iframe or content goes here -->
+    <!-- Spinner inside embed container -->
+    <div id="parentSpinner" style="display:none; overflow:hidden; width: 100%; height: 50px; position: relative; margin-bottom: 1rem;">
+      <svg
+        id="envelope"
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 64 64"
+        fill="#2563eb"
+        style="position: absolute; top: 5px; left: 0;"
+      >
+        <rect x="2" y="16" width="60" height="32" rx="4" ry="4" stroke="#2563eb" stroke-width="3" fill="none"/>
+        <polyline points="2,16 32,36 62,16" stroke="#2563eb" stroke-width="3" fill="none"/>
+      </svg>
+    </div>
+  </div>
+  
+  <!-- Controls below embed container -->
+  <div id="postActivityControls" style="display:flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; gap: 1rem; font-family: sans-serif;">
+    
+    <!-- Email Delivered button (hidden initially) -->
+    <button id="emailDeliveredBtn" style="background-color:#2563eb; color:white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; display:none;">
+      Email Delivered
+    </button>
+    
+    <!-- Center info text -->
+    <div id="activityInfoText" style="flex-grow:1; text-align: center; color: #333; font-size: 0.9rem; opacity: 0;">
+      interactive activities completed - click "reset" to start again
+    </div>
+    
+    <!-- Reset button (always visible) -->
+    <button id="resetBtn" style="background-color:#2563eb; color:white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; margin-left: auto;">
+      Reset
+    </button>
+    
+  </div>
 </div>
 
 <style>
+  /* Envelope animation */
   #envelope {
-    animation: slideAcross 3s linear infinite;
+    animation: slideAcross 3s linear forwards;
   }
-
+  
   @keyframes slideAcross {
     0% {
       left: 0;
     }
     90% {
-      left: calc(100% - 40px); /* move to the far right, accounting for width */
+      left: calc(100% - 40px); /* envelope width */
     }
     100% {
-      left: 0; /* jump instantly back to start */
+      left: 0;
     }
   }
 </style>
-
-
-
-<button 
-  onclick="resetAll()" 
-  class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm mt-4">
-  🔄 Reset All Modules
-</button>
 
     <!-- Footer -->
     <footer class="text-center text-xs text-gray-500 mt-12 mb-6">
