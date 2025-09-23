@@ -314,7 +314,7 @@ window.resetAll = function() {
   resetBtn.addEventListener('click', () => {
     emailDeliveredBtn.style.display = 'none';
     activityInfoText.style.opacity = 0;
-    showParentSpinner();
+    //showParentSpinner();
     
     // Optionally: reset your iframe or interactive content here
     window.resetAll && window.resetAll();
