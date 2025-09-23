@@ -84,6 +84,9 @@ sendEmailBtn.addEventListener('click', async () => {
   const spinner = document.getElementById('emailSendingSpinner');
    if (spinner) spinner.style.display = 'block';
 
+  // ✅ Let browser show spinner before doing heavy work
+  await new Promise(resolve => setTimeout(resolve, 50));
+
   const fileUrl = await generatePdfAndUpload();
   if (!fileUrl) {
      if (spinner) spinner.style.display = 'none'; // hide on failure   
