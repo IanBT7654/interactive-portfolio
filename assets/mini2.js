@@ -80,12 +80,18 @@ sendEmailBtn.addEventListener('click', async () => {
   const email = sendToEmail.value.trim();
   if (!validateEmail(email)) return alert("Enter a valid email address.");
 
+  // Show spinner
+  const spinner = document.getElementById('emailSendingSpinner');
+  spinner.style.display = 'block';
+
   const fileUrl = await generatePdfAndUpload();
   if (!fileUrl) return alert("PDF upload failed. Email not sent.");
 
   const { data, error } = await supabaseClient.functions.invoke('send-email', {
     body: { email, file_url: fileUrl }
   });
+
+  spinner.style.display = 'none'; // hide spinner after send completes (success or failure)
 
   if (error) {
     console.error('Email send failed:', error);
