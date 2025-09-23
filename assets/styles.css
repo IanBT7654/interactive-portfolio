@@ -73,6 +73,13 @@ h1 {
   min-height: 16rem; /* ~256px for visual consistency */
 }
 
+
+form, textarea, button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .hidden {
   display: none !important;
   height: 0 !important;
@@ -82,14 +89,17 @@ h1 {
 }
 
 #previewSection {
+  display: none;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease;
 }
 
 #previewSection.show {
-  max-height: 2000px; /* or some large enough value */
+  display: block;
+  max-height: 2000px;
+  transition: max-height 0.5s ease;
 }
+
 
 
 #blogContent img {
