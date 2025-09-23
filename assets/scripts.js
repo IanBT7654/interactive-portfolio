@@ -186,7 +186,7 @@ makeBlogBtn.insertAdjacentElement('afterend', newBtn);
 blogPreview.classList.add('dark');
 blogPreview.innerHTML = `...`; // your existing preview HTML stays the same
 
-alert('✅ Blog post saved!');
+// alert('✅ Blog post saved!');
 
 
   blogPreview.classList.add('dark');
@@ -220,9 +220,9 @@ alert('✅ Blog post saved!');
             https://automate-aig.pages.dev/blog.html
           </a>
         </p>
-        <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-          Who would have thought to find something like this on a portfolio page?
-        </p>
+       // <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+          //Who would have thought to find something like this on a portfolio page?
+       // </p>
       </article>
     </div>
   </div>
@@ -231,7 +231,7 @@ alert('✅ Blog post saved!');
 
   captionInput.value = '';
   captionContainer.classList.add('hidden');
-  alert('✅ Blog post saved!');
+  // alert('✅ Blog post saved!');
 });
 
 function containsNaughtyWords(text) {

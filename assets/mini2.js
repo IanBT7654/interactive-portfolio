@@ -26,6 +26,9 @@ form.addEventListener('submit', async (e) => {
   const promptText = docPrompt.value.trim();
   if (!promptText) return alert("Please enter a prompt.");
 
+  // Reset animation
+  previewSection.classList.remove('show');
+
   let generatedText;
   if (USE_DUMMY_DATA) {
     generatedText = `Dummy document content.\nPrompt: ${promptText}`;
@@ -36,9 +39,15 @@ form.addEventListener('submit', async (e) => {
 
   const brandedHtml = renderBrandedPDFDocument(generatedText);
   docOutput.innerHTML = brandedHtml;
-  previewSection.classList.remove('hidden');
-  downloadBtn.scrollIntoView({ behavior: 'smooth' });
-});
+  
+// Reveal the preview section with expand effect
+previewSection.classList.remove('hidden');
+previewSection.classList.add('show');
+
+// Scroll to download button after a slight delay for animation
+setTimeout(() => {
+  downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}, 300);
 
 async function generateDocumentWithAI(prompt) {
   try {
