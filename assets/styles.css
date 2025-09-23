@@ -75,7 +75,22 @@ h1 {
 
 .hidden {
   display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
 }
+
+#previewSection {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+#previewSection.show {
+  max-height: 2000px; /* or some large enough value */
+}
+
 
 #blogContent img {
   max-width: 60%;
