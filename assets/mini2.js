@@ -48,6 +48,7 @@ previewSection.classList.add('show');
 setTimeout(() => {
   downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }, 300);
+});
 
 async function generateDocumentWithAI(prompt) {
   try {
