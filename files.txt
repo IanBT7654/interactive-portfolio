@@ -1,3 +1,1 @@
 C:\Users\HP\interactive-portfolio\files.txt
-C:\Users\HP\interactive-portfolio\minimal2.html
-C:\Users\HP\interactive-portfolio\assets\mini2.js
