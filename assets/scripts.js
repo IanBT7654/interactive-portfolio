@@ -278,6 +278,17 @@ window.resetAll = function() {
   }
 });*/
 
+function showParentSpinner() {
+  const spinner = document.getElementById('parentSpinner');
+  if (spinner) spinner.style.display = 'block';
+}
+
+function hideParentSpinner() {
+  const spinner = document.getElementById('parentSpinner');
+  if (spinner) spinner.style.display = 'none';
+}
+
+
 window.addEventListener('message', (event) => {
   if (!event.data || !event.data.action) return;
 
