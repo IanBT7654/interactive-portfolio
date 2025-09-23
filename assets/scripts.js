@@ -304,7 +304,7 @@ window.resetAll = function() {
   }
 
   // Listen for envelope animation end event
-  envelope.addEventListener('animationend', onAnimationEnd);
+  envelope.addEventListener('animationend', hideParentSpinner);
 
 /* function hideParentSpinner() {
   const spinner = document.getElementById('parentSpinner');
