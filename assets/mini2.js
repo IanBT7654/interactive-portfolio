@@ -26,9 +26,6 @@ form.addEventListener('submit', async (e) => {
   const promptText = docPrompt.value.trim();
   if (!promptText) return alert("Please enter a prompt.");
 
-  // Reset animation
-  previewSection.classList.remove('show');
-
   let generatedText;
   if (USE_DUMMY_DATA) {
     generatedText = `Dummy document content.\nPrompt: ${promptText}`;
@@ -39,15 +36,8 @@ form.addEventListener('submit', async (e) => {
 
   const brandedHtml = renderBrandedPDFDocument(generatedText);
   docOutput.innerHTML = brandedHtml;
-  
-// Reveal the preview section with expand effect
-//previewSection.classList.remove('hidden');
-previewSection.classList.add('show');
-
-// Scroll to download button after a slight delay for animation
-setTimeout(() => {
-  downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}, 300);
+  previewSection.classList.remove('hidden');
+  downloadBtn.scrollIntoView({ behavior: 'smooth' });
 });
 
 async function generateDocumentWithAI(prompt) {
@@ -174,17 +164,6 @@ function renderBrandedPDFDocument(aiText = '') {
     </div>
   `;
 }
-
-function sendHeight() {
-  const height = document.documentElement.scrollHeight;
-  window.parent.postMessage({ type: 'setHeight', height }, '*');
-}
-
-window.addEventListener('load', sendHeight);
-window.addEventListener('resize', sendHeight);
-
-// If content changes dynamically, you may want to call sendHeight() again after updates.
-
 
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
