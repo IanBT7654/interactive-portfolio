@@ -101,7 +101,7 @@ form, textarea, button {
 }
 
 #docPrompt {
-  width: 90%;       /* Make input fill its container width */
+  width: 50%;       /* Make input fill its container width */
   box-sizing: border-box;  /* Include padding and border inside width */
   margin-left: 0;    /* Remove any left margin */
   padding-right: 2.8rem;  /* Add a little right padding if needed */
