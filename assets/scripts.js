@@ -268,3 +268,12 @@ window.resetAll = function() {
     window.location.href = window.location.pathname + '?t=' + new Date().getTime();
   }, 200);
 };
+
+window.addEventListener('message', (event) => {
+  if (event.data?.type === 'setHeight') {
+    const iframe = document.querySelector('iframe[src="minimal2.html"]');
+    if (iframe && event.data.height) {
+      iframe.style.height = event.data.height + 'px';
+    }
+  }
+});

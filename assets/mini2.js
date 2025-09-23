@@ -175,6 +175,17 @@ function renderBrandedPDFDocument(aiText = '') {
   `;
 }
 
+function sendHeight() {
+  const height = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'setHeight', height }, '*');
+}
+
+window.addEventListener('load', sendHeight);
+window.addEventListener('resize', sendHeight);
+
+// If content changes dynamically, you may want to call sendHeight() again after updates.
+
+
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
