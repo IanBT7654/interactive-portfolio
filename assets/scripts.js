@@ -269,11 +269,21 @@ window.resetAll = function() {
   }, 200);
 };
 
-window.addEventListener('message', (event) => {
+/* window.addEventListener('message', (event) => {
   if (event.data?.type === 'setHeight') {
     const iframe = document.querySelector('iframe[src="minimal2.html"]');
     if (iframe && event.data.height) {
       iframe.style.height = event.data.height + 'px';
     }
+  }
+});*/
+
+window.addEventListener('message', (event) => {
+  if (!event.data || !event.data.action) return;
+
+  if (event.data.action === 'showSpinner') {
+    showParentSpinner(); // your function to show spinner in parent
+  } else if (event.data.action === 'hideSpinner') {
+    hideParentSpinner(); // your function to hide spinner in parent
   }
 });

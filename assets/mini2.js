@@ -82,14 +82,14 @@ sendEmailBtn.addEventListener('click', async () => {
 
   // Show spinner
   const spinner = document.getElementById('emailSendingSpinner');
-   if (spinner) spinner.style.display = 'block';
+   if (spinner) window.parent.postMessage({ action: 'showSpinner' }, '*');
 
-  // ✅ Let browser show spinner before doing heavy work
+  // ✅ may as well leave this for now - no harm done
   await new Promise(resolve => setTimeout(resolve, 50));
 
   const fileUrl = await generatePdfAndUpload();
   if (!fileUrl) {
-     if (spinner) spinner.style.display = 'none'; // hide on failure   
+     if (spinner) window.parent.postMessage({ action: 'hideSpinner' }, '*');   
      return alert("PDF upload failed. Email not sent.");
      }
 
@@ -97,7 +97,7 @@ sendEmailBtn.addEventListener('click', async () => {
     body: { email, file_url: fileUrl }
   });
 
-  if (spinner) spinner.style.display = 'none'; // ✅ Safe hide
+  if (spinner) window.parent.postMessage({ action: 'hideSpinner' }, '*'); // ✅ Safe hide
 
   if (error) {
     console.error('Email send failed:', error);
