@@ -164,15 +164,22 @@ console.log('✅ Blog saved. ID:', blogId);
 captionInput.value = '';
 captionContainer.classList.add('hidden');
 
-// Inject "View Your Live Blog" button
+// 🔄 Remove any previous "View Blog" button
+const existingBtn = document.getElementById('viewBlogBtn');
+if (existingBtn) {
+  existingBtn.remove();
+}
+
+// ✅ Create new button
 const newBtn = document.createElement('button');
+newBtn.id = 'viewBlogBtn'; // ← add an ID so we can find/remove later
 newBtn.innerText = '👀 View Your Live Blog';
 newBtn.className = 'w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm mt-2';
 newBtn.addEventListener('click', () => {
   window.open(`blog.html?featured_id=${blogId}`, '_blank');
 });
 
-// Append right below "Make Blog Post" button
+// Add after Make Blog Post button
 makeBlogBtn.insertAdjacentElement('afterend', newBtn);
 
 // Show preview (optional — this is your existing preview code)
