@@ -73,8 +73,38 @@ h1 {
   min-height: 16rem; /* ~256px for visual consistency */
 }
 
+
+form, textarea, button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .hidden {
   display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+}
+
+#previewSection {
+  display: none;
+  max-height: 0;
+  overflow: hidden;
+}
+
+#previewSection.show {
+  display: block;
+  max-height: 2000px;
+  transition: max-height 0.5s ease;
+}
+
+#docPrompt {
+  width: 100%;       /* Make input fill its container width */
+  box-sizing: border-box;  /* Include padding and border inside width */
+  margin-left: 0;    /* Remove any left margin */
+  padding-right: 0.5rem;  /* Add a little right padding if needed */
 }
 
 #blogContent img {
