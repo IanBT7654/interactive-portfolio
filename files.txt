@@ -1,1 +1,2 @@
 C:\Users\HP\interactive-portfolio\files.txt
+C:\Users\HP\interactive-portfolio\assets\config.js
