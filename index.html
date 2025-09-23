@@ -15,7 +15,7 @@
 
   <!-- Header -->
   <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow">
-    <h1 class="text-3xl font-bold">automate-aig  mmmmmmmmmmm222</h1>
+    <h1 class="text-3xl font-bold">automate-aig  mmmmmmmmmmm333</h1>
     <p class="text-sm mt-1">Automation + AIG — Interactive demo tools by Ian B</p>
     <p class="text-sm mt-1">Email: IanB@clemssecurity.com.au</p>
   </header>
@@ -179,24 +179,39 @@
   </iframe>
 </section>
 
-        <div id="parentSpinner" style="display:none; text-align:center; margin: 1rem 0;">
-  <svg width="100" height="40" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg" >
-    <!-- Paper plane shape -->
-    <polygon points="5,20 50,5 50,15 90,10 90,30 50,25 50,35" fill="#2563eb" />
+<div id="parentSpinner" style="display:none; overflow:hidden; width: 100%; height: 50px; margin: 1rem 0; position: relative;">
+  <svg
+    id="envelope"
+    xmlns="http://www.w3.org/2000/svg"
+    width="40"
+    height="40"
+    viewBox="0 0 64 64"
+    fill="#2563eb"
+    style="position: absolute; top: 5px; left: 0;"
+  >
+    <rect x="2" y="16" width="60" height="32" rx="4" ry="4" stroke="#2563eb" stroke-width="3" fill="none"/>
+    <polyline points="2,16 32,36 62,16" stroke="#2563eb" stroke-width="3" fill="none"/>
   </svg>
 </div>
 
 <style>
-  #parentSpinner svg {
-    animation: flyRightLeft 2s linear infinite;
+  #envelope {
+    animation: slideAcross 3s linear infinite;
   }
 
-  @keyframes flyRightLeft {
-    0%   { transform: translateX(0); }
-    50%  { transform: translateX(60px); }
-    100% { transform: translateX(0); }
+  @keyframes slideAcross {
+    0% {
+      left: 0;
+    }
+    90% {
+      left: calc(100% - 40px); /* move to the far right, accounting for width */
+    }
+    100% {
+      left: 0; /* jump instantly back to start */
+    }
   }
 </style>
+
 
 
 <button 
