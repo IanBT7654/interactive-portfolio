@@ -41,7 +41,7 @@ form.addEventListener('submit', async (e) => {
   docOutput.innerHTML = brandedHtml;
   
 // Reveal the preview section with expand effect
-previewSection.classList.remove('hidden');
+//previewSection.classList.remove('hidden');
 previewSection.classList.add('show');
 
 // Scroll to download button after a slight delay for animation
