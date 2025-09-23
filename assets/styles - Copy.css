@@ -1,0 +1,106 @@
+/* assets/styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f8ff; /* subtle light blue background */
+  color: #222;
+}
+
+h1 {
+  color: #E4DFF3; /* bootstrap-ish blue */
+}
+
+.sample-img {
+  transition: 0.2s ease-in-out;
+}
+
+.sample-img:hover {
+  outline: 2px solid #2563eb; /* blue-600 */
+}
+
+.upload-box input {
+  margin-top: 0.5rem;
+}
+
+#imagePlaceholder img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#croppedPreview {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Add this to your styles.css or inside <style> tags */
+.image-box .preview {
+  border-top: 3px solid #e5e7eb; /* Lighter top border */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06); /* Slightly deeper shadow */
+  border: 1px solid #d1d5db; /* Tailwind's border-gray-300 */
+  border-radius: 0.5rem;     /* Tailwind's rounded */
+  padding: 0.5rem;           /* Tailwind's p-2 */
+  background-color: #ffffff; /* Tailwind's bg-white */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Tailwind's shadow-sm */
+  transition: transform 0.2s ease-in-out;
+}
+
+.image-box:hover .preview-box:hover {
+  transform: scale(1.02); /* Tailwind's hover:scale-105 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* More elevation on hover */
+}
+
+.image-box img {
+  width: 100%;
+  border-radius: 0.25rem; /* Tailwind's rounded */
+  object-fit: cover;
+}
+
+/* Prevent file input's filename text from overflowing */
+#imageUpload {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* === Uniform heights (optional fine-tune) === */
+.image-box,
+.preview-box {
+  min-height: 16rem; /* ~256px for visual consistency */
+}
+
+.hidden {
+  display: none !important;
+}
+
+#blogContent img {
+  max-width: 60%;
+  height: auto;
+  display: block;
+  margin: 1rem auto; /* center horizontally */
+  border-radius: 8px;
+}
+
+#docOutput {
+  font-family: monospace;
+  white-space: pre-wrap;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+
+footer {
+  margin-top: 3rem;
+  padding: 1rem 0;
+  border-top: 1px solid #ccc;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
