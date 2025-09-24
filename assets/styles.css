@@ -37,7 +37,7 @@
   position: absolute;
   top: 5px;
   left: 0;
-  animation: slideAcross 3s linear infinite;
+  animation: slideAcross 6s linear infinite;
 }
 
 @keyframes slideAcross {
@@ -48,7 +48,7 @@
     left: calc(100% - 100px); /* slide to far right */
   }
   100% {
-    left: 0; /* loop back */
+    left: 45%; /* loop back */
   }
 }
 
