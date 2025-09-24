@@ -1,5 +1,9 @@
 /* assets/styles.css */
 
+* {
+  outline: 1px solid red;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
