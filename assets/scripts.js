@@ -324,6 +324,10 @@ window.addEventListener('message', (event) => {
     case 'resetAll':
       handleReset();
       break;
+    case 'focusReset':
+      const resetBtn = document.getElementById('resetBtn');
+      if (resetBtn) resetBtn.focus();
+    break;
     default:
       console.warn('Unknown action:', event.data.action);
   }
