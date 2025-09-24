@@ -247,61 +247,84 @@ function containsNaughtyWords(text) {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
+// 🧠 Spinner + Reset Handlers
+function showParentSpinner() {
   const parentSpinner = document.getElementById('parentSpinner');
   const envelope = document.getElementById('envelope');
   const emailDeliveredBtn = document.getElementById('emailDeliveredBtn');
   const activityInfoText = document.getElementById('activityInfoText');
+
+  if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
+  if (activityInfoText) activityInfoText.style.opacity = 0;
+  if (parentSpinner) parentSpinner.style.display = 'block';
+
+  if (envelope) {
+    envelope.style.animation = 'none'; // reset animation
+    envelope.offsetHeight;             // trigger reflow
+    envelope.style.animation = 'slideAcross 3s linear forwards';
+  }
+}
+
+function hideParentSpinner() {
+  const parentSpinner = document.getElementById('parentSpinner');
+  const emailDeliveredBtn = document.getElementById('emailDeliveredBtn');
+  const activityInfoText = document.getElementById('activityInfoText');
+
+  if (parentSpinner) parentSpinner.style.display = 'none';
+  if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'inline-block';
+  if (activityInfoText) activityInfoText.style.opacity = 1;
+}
+
+function handleReset() {
+  const emailDeliveredBtn = document.getElementById('emailDeliveredBtn');
+  const activityInfoText = document.getElementById('activityInfoText');
+
+  if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
+  if (activityInfoText) activityInfoText.style.opacity = 0;
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Trigger global reset if available
+  if (typeof window.resetAll === 'function') {
+    window.resetAll();
+  }
+
+  // Optionally reload iframe (if needed)
+  const iframe = document.querySelector('iframe');
+  if (iframe) iframe.src = iframe.src;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const envelope = document.getElementById('envelope');
   const resetBtn = document.getElementById('resetBtn');
 
-  function showParentSpinner() {
-    if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
-    if (activityInfoText) activityInfoText.style.opacity = 0;
-    if (parentSpinner) parentSpinner.style.display = 'block';
-
-    if (envelope) {
-      envelope.style.animation = 'none';
-      envelope.offsetHeight;
-      envelope.style.animation = 'slideAcross 3s linear forwards';
-    }
-  }
-
-  function hideParentSpinner() {
-    if (parentSpinner) parentSpinner.style.display = 'none';
-    if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'inline-block';
-    if (activityInfoText) activityInfoText.style.opacity = 1;
-  }
-
+  // Attach animation end listener to hide spinner after envelope animation
   if (envelope) {
     envelope.addEventListener('animationend', hideParentSpinner);
   }
 
+  // Attach reset button logic
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
-      if (activityInfoText) activityInfoText.style.opacity = 0;
-      window.resetAll && window.resetAll();
-    });
+    resetBtn.addEventListener('click', handleReset);
   }
-
-  window.addEventListener('message', (event) => {
-    if (!event.data || !event.data.action) return;
-
-    if (event.data.action === 'showSpinner') {
-      showParentSpinner();
-    } else if (event.data.action === 'hideSpinner') {
-      hideParentSpinner();
-    }
-  });
 });
 
-
+// 🔁 Unified postMessage listener
 window.addEventListener('message', (event) => {
   if (!event.data || !event.data.action) return;
 
-  if (event.data.action === 'showSpinner') {
-    showParentSpinner(); // your function to show spinner in parent
-  } else if (event.data.action === 'hideSpinner') {
-    hideParentSpinner(); // your function to hide spinner in parent
+  switch (event.data.action) {
+    case 'showSpinner':
+      showParentSpinner();
+      break;
+    case 'hideSpinner':
+      hideParentSpinner();
+      break;
+    case 'resetAll':
+      handleReset();
+      break;
+    default:
+      console.warn('Unknown action:', event.data.action);
   }
 });
