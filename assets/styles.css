@@ -121,6 +121,15 @@ form, textarea, button {
   line-height: 1.5;
 }
 
+@keyframes slideAcross {
+  0% { transform: translateX(-100vw); }
+  100% { transform: translateX(100vw); }
+}
+
+#envelope {
+  animation: none;
+}
+
 footer {
   margin-top: 3rem;
   padding: 1rem 0;
