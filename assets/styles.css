@@ -4,12 +4,12 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background-color: #f5f8ff; /* subtle light blue background */
-  color: #222;
+  background-color: #2a2e35; /* dark steel  from #f5f8ff;  subtle light blue background */
+  color: #e5e7eb; /* light gray text for contrast from #222;  */
 }
 
 h1 {
-  color: #E4DFF3; /* bootstrap-ish blue */
+  color: #f0f0ff; /* subtle pale lavender-blue from  #E4DFF3;  bootstrap-ish blue */
 }
 
 .sample-img {
@@ -100,12 +100,6 @@ form, textarea, button {
   transition: max-height 0.5s ease;
 }
 
-#docPrompt {
-  width: 50%;       /* Make input fill its container width */
-  box-sizing: border-box;  /* Include padding and border inside width */
-  margin-left: 0;    /* Remove any left margin */
-  padding-right: 2.8rem;  /* Add a little right padding if needed */
-}
 
 #blogContent img {
   max-width: 60%;
