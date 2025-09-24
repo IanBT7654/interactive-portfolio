@@ -246,79 +246,55 @@ function containsNaughtyWords(text) {
   return blacklist.some(word => lower.includes(word));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Handle sample image clicks
-  document.querySelectorAll(".sample-img").forEach(img => {
-    img.addEventListener("click", () => {
-      loadImageToPlaceholder(img.src);
-    });
-  });
 
-  // Show caption input on button click
-  makeBlogBtn.addEventListener("click", () => {
-    captionContainer.classList.remove("hidden");
+document.addEventListener("DOMContentLoaded", () => {
+  const parentSpinner = document.getElementById('parentSpinner');
+  const envelope = document.getElementById('envelope');
+  const emailDeliveredBtn = document.getElementById('emailDeliveredBtn');
+  const activityInfoText = document.getElementById('activityInfoText');
+  const resetBtn = document.getElementById('resetBtn');
+
+  function showParentSpinner() {
+    if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
+    if (activityInfoText) activityInfoText.style.opacity = 0;
+    if (parentSpinner) parentSpinner.style.display = 'block';
+
+    if (envelope) {
+      envelope.style.animation = 'none';
+      envelope.offsetHeight;
+      envelope.style.animation = 'slideAcross 3s linear forwards';
+    }
+  }
+
+  function hideParentSpinner() {
+    if (parentSpinner) parentSpinner.style.display = 'none';
+    if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'inline-block';
+    if (activityInfoText) activityInfoText.style.opacity = 1;
+  }
+
+  if (envelope) {
+    envelope.addEventListener('animationend', hideParentSpinner);
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (emailDeliveredBtn) emailDeliveredBtn.style.display = 'none';
+      if (activityInfoText) activityInfoText.style.opacity = 0;
+      window.resetAll && window.resetAll();
+    });
+  }
+
+  window.addEventListener('message', (event) => {
+    if (!event.data || !event.data.action) return;
+
+    if (event.data.action === 'showSpinner') {
+      showParentSpinner();
+    } else if (event.data.action === 'hideSpinner') {
+      hideParentSpinner();
+    }
   });
 });
 
-console.log("Interactive Portfolio scripts loaded.");
-
-window.resetAll = function() {
-  const iframe = document.querySelector('iframe[src*="minimal2.html"]');
-
-  if (iframe) {
-    const baseSrc = iframe.src.split('?')[0];
-    iframe.src = baseSrc + '?t=' + new Date().getTime();
-  }
-
-  setTimeout(() => {
-    window.location.href = window.location.pathname + '?t=' + new Date().getTime();
-  }, 200);
-};
-
-/* window.addEventListener('message', (event) => {
-  if (event.data?.type === 'setHeight') {
-    const iframe = document.querySelector('iframe[src="minimal2.html"]');
-    if (iframe && event.data.height) {
-      iframe.style.height = event.data.height + 'px';
-    }
-  }
-});*/
-
-// Show spinner & start animation
-  function showParentSpinner() {
-    emailDeliveredBtn.style.display = 'none';
-    activityInfoText.style.opacity = 0;
-    parentSpinner.style.display = 'block';
-    
-    // Restart animation
-    envelope.style.animation = 'none';
-    envelope.offsetHeight; // trigger reflow
-    envelope.style.animation = 'slideAcross 3s linear forwards';
-  }
-
-// Hide spinner and show post-animation controls
-  function hideParentSpinner() {          //was called onAnimationEnd - worng name
-    parentSpinner.style.display = 'none';
-    emailDeliveredBtn.style.display = 'inline-block';
-    activityInfoText.style.opacity = 1;
-  }
-
-  // Listen for envelope animation end event
-  envelope.addEventListener('animationend', hideParentSpinner);
-
-/* function hideParentSpinner() {
-  const spinner = document.getElementById('parentSpinner');
-  if (spinner) spinner.style.display = 'none';
-} */
-  // Reset button click handler
-  resetBtn.addEventListener('click', () => {
-    emailDeliveredBtn.style.display = 'none';
-    activityInfoText.style.opacity = 0;
-    //showParentSpinner();
-    
-    // Optionally: reset your iframe or interactive content here
-    window.resetAll && window.resetAll();
-  });
 
 window.addEventListener('message', (event) => {
   if (!event.data || !event.data.action) return;
