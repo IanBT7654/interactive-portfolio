@@ -48,37 +48,20 @@
     Think of this as a live portfolio — these modules integrate code run in-browser connected to a cloud-database that calls GROQ for AIG support.
   </p>
 </section>
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+<!-- Grid Layout for Left (Descriptions) and Right (Modules) -->
+  <main class="max-w-7xl mx-auto px-6 space-y-16">
 
-<div class="flex max-w-7xl mx-auto px-6 gap-8">
+    <!-- Grid Row: Module 1 -->
+    <div class="grid md:grid-cols-5 gap-8 items-start">
+      <!-- Left Description (2/5) -->
+      <aside class="md:col-span-2 text-sm text-gray-300">
+        <h3 class="text-white font-semibold mb-2">Module 1: Image Resizer</h3>
+        <p>Crop, caption & publish to blog</p>
+      </aside>
 
-  <!-- LEFT Sidebar (40%) -->
-  <aside class="w-2/5 flex flex-col justify-between sticky top-6 text-sm text-gray-300">
-
-    <!-- Left Def for Module 1 -->
-    <div class="mb-8 left-module-1">
-      <h3 class="text-white font-semibold mb-2">Module 1: Image Resizer</h3>
-      <p>Crop, caption & publish to blog</p>
-    </div>
-
-    <!-- Left Def for Module 2 -->
-    <div class="mb-8 left-module-2">
-      <h3 class="text-white font-semibold mb-2">Module 2: Error Explainer</h3>
-      <p>AI-humanized Supabase errors</p>
-    </div>
-
-    <!-- Left Def for Module 3 -->
-    <div class="mb-8 left-module-3">
-      <h3 class="text-white font-semibold mb-2">Module 3: Document Generator</h3>
-      <p>Secure doc delivery w/ AI inserts</p>
-    </div>
-
-  </aside>
-
-
-      <!-- RIGHT CONTENT (60%) -->
-      <section class="w-3/5 space-y-10">
-
-    
+      <!-- Right Module (3/5) -->
+      <section class="md:col-span-3 bg-white text-gray-900 p-6 rounded-lg shadow">
         <!-- Module 1: Image Resizer -->
         <section id="module1" class="bg-white rounded-lg shadow p-6 text-gray-900">
           <h3 class="text-lg font-bold mb-4">✅ Image Resizer, Blog Post Preview & Instant Online Blog Page Update.</h3>
@@ -133,6 +116,18 @@
           </div>
         </section>
 
+        
+      </section>
+    </div>
+
+    <!-- Grid Row: Module 2 -->
+    <div class="grid md:grid-cols-5 gap-8 items-start">
+      <aside class="md:col-span-2 text-sm text-gray-300">
+        <h3 class="text-white font-semibold mb-2">Module 2: Error Explainer</h3>
+        <p>AI-humanized Supabase errors</p>
+      </aside>
+      <section class="md:col-span-3 bg-white text-gray-900 p-6 rounded-lg shadow">
+        <!-- Your Error Explainer module goes here -->
         <!-- Module 2: AI Error Explainer -->
         <section id="module2" class="bg-white rounded-lg shadow p-6 text-gray-900 md:flex md:gap-6">
           <!-- Left -->
@@ -176,7 +171,17 @@
             <div id="livePreview" class="bg-gray-50 border rounded p-4 overflow-auto max-h-[400px] text-sm font-mono whitespace-nowrap"></div>
           </div>
         </section>
+      </section>
+    </div>
 
+    <!-- Grid Row: Module 3 -->
+    <div class="grid md:grid-cols-5 gap-8 items-start">
+      <aside class="md:col-span-2 text-sm text-gray-300">
+        <h3 class="text-white font-semibold mb-2">Module 3: Document Generator</h3>
+        <p>Secure doc delivery w/ AI inserts</p>
+      </aside>
+      <section class="md:col-span-3 bg-white text-gray-900 p-6 rounded-lg shadow">
+        <!-- Your Doc Generator module goes here -->
         <!-- Module 3: Document Generator -->
         <section id="module3" class="bg-white rounded-lg shadow p-6 text-gray-900">
           <h2 class="text-2xl font-semibold mb-4">✅ Document Generator with AI + Secure Drop</h2>
@@ -189,11 +194,11 @@
             <button id="resetBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Reset</button>
           </div>
         </section>
-
-      </section> <!-- End right column -->
-
+      </section>
     </div>
+
   </main>
+
 
   <!-- Footer -->
   <footer class="text-center text-xs text-gray-500 mt-12 mb-6">
