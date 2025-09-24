@@ -1,5 +1,4 @@
 C:\Users\HP\interactive-portfolio\files.txt
 C:\Users\HP\interactive-portfolio\index.html
-C:\Users\HP\interactive-portfolio\assets\scripts.js
 C:\Users\HP\interactive-portfolio\assets\styles.css
 C:\Users\HP\interactive-portfolio\img\logo.png
