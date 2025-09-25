@@ -353,3 +353,5 @@ window.addEventListener('message', (event) => {
       console.warn('Unknown action:', event.data.action);
   }
 });
+
+window.containsNaughtyWords = containsNaughtyWords;
