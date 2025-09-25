@@ -74,6 +74,10 @@ form.addEventListener('submit', async (e) => {
 //previewSection.classList.remove('hidden');
 previewSection.classList.add('show');
 
+// ✅ Re-enable the Download button for new content
+downloadBtn.disabled = false;
+downloadBtn.style.opacity = 1;
+
 // Scroll to download button after a slight delay for animation
 setTimeout(() => {
   downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
