@@ -11,6 +11,25 @@ async function testConnection() {
 }
 testConnection();
 
+// 🔞 Profanity + unsafe content check using bad-words
+async function containsNaughtyWords(text) {
+  const Filter = (await import('https://cdn.skypack.dev/bad-words')).default;
+  const filter = new Filter();
+
+  // Optional: Add your own banned words here
+  filter.addWords('yourcustombadword', 'anotherbadword');
+
+  // Your existing manual blacklist
+  const manualBlacklist = ['http', 'https', 'www', '<script', 'onerror', 'base64'];
+  const lower = text.toLowerCase();
+
+  const hasManual = manualBlacklist.some(word => lower.includes(word));
+  const hasProfanity = filter.isProfane(lower);
+
+  return hasManual || hasProfanity;
+}
+
+
 const imageUpload = document.getElementById('imageUpload');
 const selectedImage = document.getElementById('selectedImage');
 const croppedCanvas = document.getElementById('croppedPreview');
@@ -137,8 +156,16 @@ makeBlogBtn.addEventListener('click', () => {
 submitBlogBtn.addEventListener('click', async () => {
   const caption = captionInput.value.trim();
 
-  if (!caption) return alert('Caption is required.');
-  if (containsNaughtyWords(caption)) return alert('⚠️ Caption contains restricted words.');
+  if (!caption) {
+    alert('Caption is required.');
+    return;
+  }
+
+  // 🔞 Check for profanity or unsafe content
+  if (await containsNaughtyWords(caption)) {
+    alert('⚠️ Caption contains restricted or unsafe content.');
+    return;
+  }
 
   const blob = await new Promise((resolve) => {
     const croppedCanvasTemp = cropper.getCroppedCanvas({ width: 1280, height: 853 });
@@ -162,97 +189,74 @@ submitBlogBtn.addEventListener('click', async () => {
     .getPublicUrl(uniqueFilename).data.publicUrl;
 
   const { data: insertedData, error: insertError } = await supabaseClient
-  .from('blog_posts')
-  .insert([{ image_url: imageUrl, caption }])
-  .select('id')   // 👈 Return the ID of the inserted row
-  .single();      // 👈 Expect a single row, not an array
+    .from('blog_posts')
+    .insert([{ image_url: imageUrl, caption }])
+    .select('id')
+    .single();
 
-if (insertError) {
-  console.error('❌ DB Error:', insertError.message);
-  alert('Database insert failed.');
-  return;
-}
+  if (insertError) {
+    console.error('❌ DB Error:', insertError.message);
+    alert('Database insert failed.');
+    return;
+  }
 
-const blogId = insertedData.id;
-console.log('✅ Blog saved. ID:', blogId);
+  const blogId = insertedData.id;
+  console.log('✅ Blog saved. ID:', blogId);
 
-// Hide caption UI
-captionInput.value = '';
-captionContainer.classList.add('hidden');
+  captionInput.value = '';
+  captionContainer.classList.add('hidden');
 
-// 🔄 Remove any previous "View Blog" button
-const existingBtn = document.getElementById('viewBlogBtn');
-if (existingBtn) {
-  existingBtn.remove();
-}
+  // Remove existing button if needed
+  const existingBtn = document.getElementById('viewBlogBtn');
+  if (existingBtn) existingBtn.remove();
 
-// ✅ Create new button
-const newBtn = document.createElement('button');
-newBtn.id = 'viewBlogBtn'; // ← add an ID so we can find/remove later
-newBtn.innerText = '👀 View Your Live Blog';
-newBtn.className = 'w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm mt-2';
-newBtn.addEventListener('click', () => {
-  window.open(`blog.html?featured_id=${blogId}`, '_blank');
-});
+  const newBtn = document.createElement('button');
+  newBtn.id = 'viewBlogBtn';
+  newBtn.innerText = '👀 View Your Live Blog';
+  newBtn.className = 'w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm mt-2';
+  newBtn.addEventListener('click', () => {
+    window.open(`blog.html?featured_id=${blogId}`, '_blank');
+  });
 
-// Add after Make Blog Post button
-makeBlogBtn.insertAdjacentElement('afterend', newBtn);
+  makeBlogBtn.insertAdjacentElement('afterend', newBtn);
 
-// Show preview (optional — this is your existing preview code)
-blogPreview.classList.add('dark');
-blogPreview.innerHTML = `...`; // your existing preview HTML stays the same
-
-// alert('✅ Blog post saved!');
-
-
+  // Set blog preview HTML
   blogPreview.classList.add('dark');
-
-  // Display result
   blogPreview.innerHTML = `
   <div style="background-color: rgb(127, 127, 127);" class="w-full h-full p-6 rounded shadow-inner overflow-auto">
     <div class="bg-white dark:bg-gray-800 dark:text-gray-200 text-gray-900 w-full max-w-2xl mx-auto rounded-lg shadow p-6">
-      <!-- Mini Blog Header -->
       <header class="border-b pb-3 mb-3 border-gray-300 dark:border-gray-600">
         <h1 class="text-2xl font-bold text-indigo-700 dark:text-indigo-300">Your Blog</h1>
         <p class="text-sm text-gray-600 dark:text-gray-400">is live on the web.</p>
         <p class="text-sm text-gray-600 dark:text-gray-400">scroll down for the link.</p>
       </header>
 
-      <!-- Blog Article -->
       <article class="text-left">
         <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-1">${caption}</h2>
         <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">
-          <i class="fas fa-calendar-alt mr-1"></i>${new Date().toLocaleDateString()} &nbsp;•&nbsp;
-          <i class="fas fa-user mr-1"></i> <your Domain>
+          ${new Date().toLocaleDateString()} &nbsp;•&nbsp; <your domain>
         </p>
         <img src="${imageUrl}" alt="Blog Image" class="w-full rounded mb-3 max-h-60 object-cover border dark:border-gray-600" />
-        
+
         <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug mb-2">
-          I found this is a fully featured image resizer designed to resize images for web blogs. The preview (1280x853) can be right-clicked and saved.
+          This image was resized and uploaded via the interactive profile page demo.
         </p>
         <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug mb-2">
-          Here's the link 
+          Here's the live link:
           <a href="https://automate-aig.pages.dev/blog.html?featured_id=${blogId}" target="_blank" class="text-blue-600 underline hover:text-blue-800">
-            https://automate-aig.pages.dev/blog.html
+            https://automate-aig.pages.dev/blog.html?featured_id=${blogId}
           </a>
         </p>
-       
       </article>
     </div>
-  </div>
-`;
-
-
-  captionInput.value = '';
-  captionContainer.classList.add('hidden');
-  // alert('✅ Blog post saved!');
+  </div>`;
 });
 
-function containsNaughtyWords(text) {
+/* function containsNaughtyWords(text) {
   const blacklist = ['badword1', 'badword2', 'http', 'https', 'www', '<script', 'onerror'];
   const lower = text.toLowerCase();
   return blacklist.some(word => lower.includes(word));
-}
+} */
 
 
 // 🧠 Spinner + Reset Handlers
