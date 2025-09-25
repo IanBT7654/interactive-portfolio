@@ -24,7 +24,7 @@ async function containsNaughtyWords(text) {
 
 
 
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 const form = document.getElementById('docForm');
 const docPrompt = document.getElementById('docPrompt');
