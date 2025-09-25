@@ -19,7 +19,7 @@ const module = await import('https://esm.sh/bad-words@3.0.4');
 const Filter = module.default;
 const filter = new Filter();
 
-  const filter = new Filter();
+  
 
   // Optional: Add your own extra banned words
   filter.addWords(
