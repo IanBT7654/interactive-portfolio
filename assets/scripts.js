@@ -12,10 +12,12 @@ async function testConnection() {
 testConnection();
 
 // 🔞 Profanity + unsafe content check using bad-words
-// 🔞 Profanity + unsafe content check using bad-words
 async function containsNaughtyWords(text) {
   // Dynamically import bad-words using Skypack
-  const { default: Filter } = await import('https://cdn.skypack.dev/bad-words');
+ // const { default: Filter } = await import('https://cdn.skypack.dev/bad-words');
+const module = await import('https://esm.sh/bad-words@3.0.4');
+const Filter = module.default;
+const filter = new Filter();
 
   const filter = new Filter();
 
