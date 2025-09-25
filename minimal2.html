@@ -18,7 +18,6 @@
       font-size: 1rem;
     }
     button {
-      margin-top: 10px;
       padding: 10px 20px;
     }
     .hidden {
@@ -40,7 +39,6 @@
     margin: 20px 0;
   }
     #emailPair {
-  margin-top: 15px;
   display: flex;
   gap: 10px;
   align-items: stretch; /* Stretch both children to same height */
@@ -89,7 +87,10 @@ input, button {
     <button id="downloadBtn">Download PDF</button>
 
     <div id="emailPair" style="opacity: 0.5; pointer-events: none;">
-      <input type="email" id="recipientEmail" placeholder="Enter email to send to" />
+      //<input type="email" id="recipientEmail" placeholder="Enter email to send to" />
+      <input type="email" id="recipientEmail" placeholder="Enter email to send to" style="height: 40px; box-sizing: border-box; padding: 8px; font-size: 1rem; line-height: 1.2; border: 1px solid #ccc;"
+/>
+
       <button id="sendEmailBtn">Send Email</button>
     </div>
 
