@@ -236,9 +236,7 @@ blogPreview.innerHTML = `...`; // your existing preview HTML stays the same
             https://automate-aig.pages.dev/blog.html
           </a>
         </p>
-       // <p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
-          //Who would have thought to find something like this on a portfolio page?
-       // </p>
+       
       </article>
     </div>
   </div>
