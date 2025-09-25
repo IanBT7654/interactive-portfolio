@@ -13,13 +13,15 @@ testConnection();
 
 // 🔞 Profanity + unsafe content check using bad-words
 async function containsNaughtyWords(text) {
-  const Filter = (await import('https://cdn.skypack.dev/bad-words')).default;
+  // Dynamically import bad-words properly
+  const module = await import('https://cdn.skypack.dev/bad-words');
+  const Filter = module.default || module; // Handle both ESM and default export
   const filter = new Filter();
 
-  // Optional: Add your own banned words here
+  // Optional: Add your own extra banned words
   filter.addWords('yourcustombadword', 'anotherbadword');
 
-  // Your existing manual blacklist
+  // Manual blacklist for unsafe HTML/JS content
   const manualBlacklist = ['http', 'https', 'www', '<script', 'onerror', 'base64'];
   const lower = text.toLowerCase();
 
