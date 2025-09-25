@@ -27,6 +27,9 @@ const uploadDropZone = document.getElementById('uploadDropZone');
   const activityInfoText = document.getElementById('activityInfoText');
   const resetBtn = document.getElementById('resetBtn');
 
+if (!imageUpload) console.error('❌ imageUpload not found');
+if (!uploadDropZone) console.error('❌ uploadDropZone not found');
+
 let cropper = null;
 let originalFileName = '';
 
@@ -60,6 +63,13 @@ function loadImageToPlaceholder(src) {
     });
   };
 }
+
+// 🖼️ Click handler for sample images
+document.querySelectorAll('.sample-img').forEach(img => {
+  img.addEventListener('click', () => {
+    loadImageToPlaceholder(img.src);
+  });
+});
 
 // Drag & Drop handlers for upload zone
 uploadDropZone.addEventListener('click', () => {
