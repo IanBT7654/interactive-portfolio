@@ -1,4 +1,28 @@
+//mini2.js
 import { supabaseClient } from './config.js';
+
+async function containsNaughtyWords(text) {
+  const module = await import('https://esm.sh/bad-words@3.0.4');
+  const Filter = module.default;
+  const filter = new Filter();
+
+  filter.addWords(
+    'yourcustombadword',
+    'anotherbadword',
+    'offensive1',
+    'offensive2'
+  );
+
+  const manualBlacklist = ['http', 'https', 'www', '<script', 'onerror', 'base64'];
+  const lower = text.toLowerCase();
+
+  const hasManual = manualBlacklist.some(word => lower.includes(word));
+  const hasProfanity = filter.isProfane(lower);
+
+  return hasManual || hasProfanity;
+}
+
+
 
 const USE_DUMMY_DATA = true;
 
@@ -25,6 +49,12 @@ form.addEventListener('submit', async (e) => {
 
   const promptText = docPrompt.value.trim();
   if (!promptText) return alert("Please enter a prompt.");
+
+  // 🔞 Check for unsafe or profane content
+  if (await containsNaughtyWords(promptText)) {
+  return alert("⚠️ Your prompt contains unsafe or inappropriate content.");
+}
+
 
   // Reset animation
   previewSection.classList.remove('show');
